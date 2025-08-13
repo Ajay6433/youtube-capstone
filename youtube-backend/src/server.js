@@ -41,8 +41,3 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-
-// mongodb+srv://ajaykhan6433:Dw7fQ6gyKxfiGGGQ@cluster0.7ozugq8.mongodb.net/
-
-// ajaykhan6433
-// Dw7fQ6gyKxfiGGGQ
