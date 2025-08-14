@@ -8,7 +8,5 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// sanity log (remove later)
-console.log('Cloudinary cloud:', cloudinary.config().cloud_name);
 
 export default cloudinary;  // <-- Export the cloudinary instance itself
