@@ -6,7 +6,7 @@ import upload from '../middlewares/upload.middleware.js';
 const router = express.Router();
 
 // Public routes
-router.post('/register', upload.single('avatar'), register);
+router.post('/register', register);
 router.post('/login', login);
 
 
