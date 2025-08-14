@@ -10,6 +10,8 @@ const storage = new CloudinaryStorage({
     transformation: [{ width: 300, height: 300, crop: 'fill' }] // optional resize
   },
 });
+console.log("Consoling from the configuration file");
+
 
 const upload = multer({ storage });
 export default upload;
