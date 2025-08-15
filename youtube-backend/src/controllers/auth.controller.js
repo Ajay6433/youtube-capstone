@@ -2,6 +2,67 @@ import User from '../models/User.model.js';
 import { generateToken } from '../utils/jwt.utils.js';
 import bcrypt from 'bcrypt';
 import { generateFromEmail } from 'unique-username-generator';
+import { OAuth2Client } from 'google-auth-library';
+
+
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { id_token } = req.body; // frontend will send this token
+    if (!id_token) {
+      return res.status(400).json({ message: "ID token is required" });
+    }
+
+    // Verify the token with Google
+    const ticket = await client.verifyIdToken({
+      idToken: id_token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
+
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    const username = generateFromEmail(email, 4); // create unique username from email
+    const randomPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), 10);
+    console.log("randomPassword:", randomPassword)
+
+
+    // If not, register new user automatically
+    if (!user) {
+      user = await User.create({
+        username,
+        name,
+        email,
+        password: randomPassword, 
+        avatar: picture || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      });
+    }
+
+    // Generate JWT
+    const token = generateToken({id: user._id});
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+      },
+    });
+  } catch (error) {
+    console.error("Google login error:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+
 
 export async function register(req, res) {
   try {
@@ -91,3 +152,4 @@ export async function login(req, res) {
         return res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 }
+
