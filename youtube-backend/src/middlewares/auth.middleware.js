@@ -3,7 +3,7 @@ import { verifyToken } from '../utils/jwt.utils.js';
 export const protect = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith('JWT ')) {
+  if (!authHeader || !authHeader.startsWith('JWT')) {
     return res.status(401).json({ message: 'No token provided' });
   }
 
