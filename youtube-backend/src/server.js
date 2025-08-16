@@ -5,6 +5,7 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/auth.routes.js';
 import channelRoutes from './routes/channel.routes.js';
 import videoRoutes from './routes/video.routes.js';
+import commentRoutes from './routes/comment.routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/channel', channelRoutes);
 app.use('/api/videos', videoRoutes);
+app.use('/api/comments', commentRoutes);
+
 
 // Basic route for testing
 app.get('/', (req, res) => {
