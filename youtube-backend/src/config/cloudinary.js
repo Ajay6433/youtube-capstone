@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config(); // <-- ensures env vars exist here in ESM
+
 import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({

@@ -1,11 +1,11 @@
-import express from 'express';
-import { createChannel, getChannel} from '../controllers/channel.controller.js';
-import { protect } from '../middlewares/auth.middleware.js';
+import express from "express";
+import { createChannel, getChannel } from "../controllers/channel.controller.js";
+import { protect } from "../middlewares/auth.middleware.js";
+import uploadBanner from "../middlewares/bannerUpload.middleware.js";
 
 const router = express.Router();
 
-// Protected routes
-router.post('/create', protect, createChannel);
-router.get('/:id', protect, getChannel);
+router.post("/create", protect, uploadBanner.single("channelBanner"), createChannel);
+router.get("/:id", getChannel);
 
 export default router;

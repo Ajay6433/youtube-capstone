@@ -17,7 +17,7 @@ const channelSchema = new mongoose.Schema({
   },
   channelBanner: {
     type: String,
-    default: 'https://cdn-icons-png.flaticon.com/512/3177/3177440.png' // fallback banner
+    default: 'https://res.cloudinary.com/dfpavmulj/image/upload/v1755338799/youtubeBanner-Hero_m33z7c.webp' // fallback banner
   },
   subscribers: {
     type: Number,
