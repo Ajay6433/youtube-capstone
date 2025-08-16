@@ -106,3 +106,65 @@ export async function getTrendingVideos(req, res) {
     return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 }
+
+
+export async function updateVideo(req, res) {
+    try {
+      const { id } = req.params;
+      const { title, description, category } = req.body;
+  
+      const video = await Video.findById(id);
+      if (!video) {
+        return res.status(404).json({ message: "Video not found" });
+      }
+  
+      if (video.uploader.toString() !== req.user.id) {
+        return res.status(403).json({ message: "Not authorized to update this video" });
+      }
+  
+      // Update fields if provided
+      if (title) video.title = title;
+      if (description) video.description = description;
+      if (category) video.category = category;
+  
+      // If thumbnail uploaded via multer + cloudinary
+      if (req.file && req.file.path) {
+        video.thumbnail = req.file.path; // Cloudinary URL
+      }
+  
+      await video.save();
+  
+      return res.status(200).json({
+        message: "Video updated successfully",
+        video,
+      });
+    } catch (error) {
+      console.error("Error updating video:", error);
+      return res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+  }
+  
+
+  
+  export async function deleteVideo(req, res) {
+    try {
+      const { id } = req.params;
+  
+      const video = await Video.findById(id);
+      if (!video) {
+        return res.status(404).json({ message: "Video not found" });
+      }
+  
+      if (video.uploader.toString() !== req.user.id) {
+        return res.status(403).json({ message: "Not authorized to delete this video" });
+      }
+  
+      await video.deleteOne();
+  
+      return res.status(200).json({ message: "Video deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting video:", error);
+      return res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+  }
+  
