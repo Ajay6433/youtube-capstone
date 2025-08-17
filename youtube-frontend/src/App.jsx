@@ -1,10 +1,13 @@
+import Login from "./pages/login/Login.jsx";
+import Signup from "./pages/signUp/SignUP.jsx";
 import GoogleLoginButton from "./utils/GoogleLoginButton.jsx";
 
 export default function App() {
   return (
     <div>
-      <h1>Sign in with Google</h1>
-      <GoogleLoginButton />
+      Youtube clone
+      {/* <Login /> */}
+      <Signup />
     </div>
   );
 }

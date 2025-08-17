@@ -6,7 +6,6 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const GoogleLoginButton = () => {
   useEffect(() => {
-    console.log(GOOGLE_CLIENT_ID)
     /* global google */
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID, // from GCP
