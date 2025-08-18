@@ -1,18 +1,18 @@
 import api from "../../api/api";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    avatar: null,   // file object
+    avatar: null, // file object
   });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    // if avatar is being updated, pick file
     if (name === "avatar") {
       setFormData((prev) => ({ ...prev, avatar: files[0] }));
     } else {
@@ -23,7 +23,6 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // prepare multipart data
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("email", formData.email);
@@ -35,58 +34,91 @@ export default function Signup() {
     try {
       const res = await api.post("/auth/register", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true, // if using cookies/JWT
+        withCredentials: true,
       });
+
+      toast.success("Signup successful!");
       console.log("Signup successful:", res.data);
+
+      // Optional: redirect after signup
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
     } catch (error) {
       console.error("Signup error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.message || "Signup failed!");
     }
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto" }}>
-      <h2>Create Account</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <br /><br />
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+          Create Your Account
+        </h2>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <br /><br />
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <br /><br />
+          <div>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
 
-        <input
-          type="file"
-          name="avatar"
-          accept="image/*"
-          onChange={handleChange}
-        />
-        <br /><br />
+          <div>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
 
-        <button type="submit">Sign Up</button>
-      </form>
+          <div>
+            <input
+              type="file"
+              name="avatar"
+              accept="image/*"
+              onChange={handleChange}
+              className="w-full p-2 border rounded-lg text-gray-700 bg-gray-50"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg transition duration-200"
+          >
+            Sign Up
+          </button>
+        </form>
+
+        <p className="text-sm text-gray-600 text-center mt-6">
+          Already have an account?{" "}
+          <a href="/login" className="text-red-600 hover:underline">
+            Login
+          </a>
+        </p>
+      </div>
     </div>
   );
 }
