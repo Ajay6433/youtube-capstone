@@ -14,7 +14,7 @@ const LoginIllustration = () => {
       <img
         src={loginIllustration}
         alt="Login Illustration"
-        className="w-full h-auto object-contain rounded-xl shadow-lg"
+        className="w-full h-auto object-contain rounded-xl "
       />
     </motion.div>
   );

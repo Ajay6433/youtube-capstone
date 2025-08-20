@@ -4,6 +4,7 @@ import { UserContext } from "../../context/UserContext";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import GoogleLoginButton from "../../utils/GoogleLoginButton";
 
 export default function Login() {
   const { login } = useContext(UserContext);
@@ -35,13 +36,13 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center ">
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-full max-w-sm sm:max-w-md md:max-w-lg bg-white text-black flex flex-col justify-center p-6 sm:p-8 md:p-10 shadow-md rounded-xl mx-auto"
+        className="w-full max-w-sm sm:max-w-md md:max-w-lg bg-white text-black flex flex-col justify-center p-6 sm:p-8 md:p-8 rounded-xl mx-auto"
       >
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-center">
           Sign in to YouTube
@@ -81,6 +82,11 @@ export default function Login() {
           >
             {loading ? "Logging in..." : "Continue to Login"}
           </button>
+        </div>
+        <hr/>
+        <p className="text-center text-sm mb-4 sm:mb-6">or</p>
+        <div className="flex justify-center mb-4 sm:mb-6">
+          <GoogleLoginButton />
         </div>
 
         <p className="text-center text-sm">

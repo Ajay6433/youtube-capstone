@@ -1,10 +1,15 @@
 import { useEffect } from "react";
 import axios from "axios";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import toast from "react-hot-toast";
 
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const GoogleLoginButton = () => {
+
+  const {login} = useContext(UserContext);
   useEffect(() => {
     /* global google */
     google.accounts.id.initialize({
@@ -26,11 +31,15 @@ const GoogleLoginButton = () => {
       });
 
       console.log("Login success:", res.data);
+      // Save user data in context
+      login(res.data.user);
+      // Redirect to home page
+      window.location.href = "/";
 
       // You can save JWT token in localStorage
       localStorage.setItem("token", res.data.token);
 
-      alert("Google Login Successful!");
+      toast.success("Google Login Successful!");
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
       alert("Google Login Failed!");
