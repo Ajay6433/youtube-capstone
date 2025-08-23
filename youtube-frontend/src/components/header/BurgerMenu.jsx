@@ -1,8 +1,9 @@
-const BurgerMenu = () => {
+
+const BurgerMenu = ({ onClick }) => {
   return (
     <button
-    //   onClick={handleDrawerToggle}
-      className="btn btn-circle mr-2 drawer-button p-2"
+      onClick={onClick}
+      className="btn btn-circle mr-2 drawer-button p-2 cursor-pointer"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

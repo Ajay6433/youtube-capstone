@@ -5,9 +5,12 @@ import SearchBar from "./SearchBar";
 import ProfileButton from "./ProfileButton";
 import SearchToggle from "./SearchToggle";
 import SearchModal from "./SearchModal";
+import Sidebar from "../sidebar/Sidebar";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = memo(() => {
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   // Handle window resize
@@ -37,7 +40,7 @@ const Navbar = memo(() => {
       >
         {/* Left: Burger menu + Logo */}
         <div className="flex items-center space-x-2">
-          <BurgerMenu />
+          <BurgerMenu onClick={() => setShowSidebar(true)} />
           <Logo />
         </div>
 
@@ -56,12 +59,15 @@ const Navbar = memo(() => {
         {/* Right: Profile Button */}
         <nav className="flex items-center space-x-2">
           <ProfileButton />
+          <ThemeToggle />
         </nav>
       </header>
       {/* Search Modal for mobile */}
       {showSearchBar && (
         <SearchModal setShowSearchBar={setShowSearchBar} />
       )}
+       {/* Sidebar */}
+      <Sidebar isOpen={showSidebar} onClose={() => setShowSidebar(false)} />
 
     </>
   );
