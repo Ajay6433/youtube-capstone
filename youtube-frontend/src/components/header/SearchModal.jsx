@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const SearchModal = ({ setShowSearchBar }) => {
   return (
-    <div className="fixed w-full left-0 top-0 h-14 z-60 bg-white">
+    <div className="fixed w-full left-0 top-0 h-14 z-60 absolute flex items-center justify-center bg-white">
       <div className=" w-full h-14 flex items-center gap-4 justify-between px-3 bg-base-300">
         <button
           className="btn btn-ghost"
@@ -12,7 +12,7 @@ const SearchModal = ({ setShowSearchBar }) => {
         >
           <FaArrowLeft size={20} />
         </button>
-        <SearchBar autoFocusOnMount className="flex justify-center w-full relative"  />
+        <SearchBar autoFocusOnMount forceShow className="flex justify-center w-full relative"  />
       </div>
     </div>
   );
