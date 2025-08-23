@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import Logo from "../header/Logo";
+import { mainMenu, youMenu, exploreMenu } from "./SidebarMenu";
+
 
 const Sidebar = ({ isOpen, onClose }) => {
     useEffect(() => {
@@ -10,6 +12,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         }
         return () => { document.body.style.overflow = "auto"; };
     }, [isOpen]);
+
 
     return (
         <div
@@ -22,6 +25,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 className={`absolute top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
             >
+                {/* Sidebar header */}
                 <div className="flex h-16 items-center px-4 p-4 border-b">
                     <button
                         onClick={onClose}
@@ -41,13 +45,38 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <Logo />
                 </div>
 
-                <nav className="p-4 space-y-4">
-                    <a href="/" className="block">Home</a>
-                    <a href="/explore" className="block">Explore</a>
-                    <a href="/subscriptions" className="block">Subscriptions</a>
-                    <a href="/library" className="block">Library</a>
-                </nav>
-            </div>
+                <div className="h-[calc(100vh-4rem)] overflow-y-auto">
+                    {/* Sidebar content */}
+                    {
+                        mainMenu.map((menu) => {
+                            return (<nav className="p-4 space-y-4">
+                                <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
+                            </nav>
+                            )
+                        })
+                    }
+                    <div className="border-t my-2"></div>
+                    <div className="text-xs text-gray-500 px-4">You</div>
+                    {
+                        youMenu.map((menu) => {
+                            return (<nav className="p-4 space-y-4">
+                                <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
+                            </nav>
+                            )
+                        })
+                    }
+                    <div className="border-t my-2"></div>
+                    <div className="text-xs text-gray-500 px-4">Explore</div>
+                    {
+                        exploreMenu.map((menu) => {
+                            return (<nav className="p-4 space-y-4">
+                                <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
+                            </nav>
+                            )
+                        })
+                    }
+
+                </div>            </div>
         </div>
     );
 };

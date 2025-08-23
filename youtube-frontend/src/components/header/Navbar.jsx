@@ -6,7 +6,6 @@ import ProfileButton from "./ProfileButton";
 import SearchToggle from "./SearchToggle";
 import SearchModal from "./SearchModal";
 import Sidebar from "../sidebar/Sidebar";
-import ThemeToggle from "./ThemeToggle";
 
 const Navbar = memo(() => {
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -35,7 +34,7 @@ const Navbar = memo(() => {
           fixed top-0 left-0 right-0 
           flex items-center justify-between 
           px-4 py-2 
-          z-50 bg-white shadow 
+          z-50 bg-white
         "
       >
         {/* Left: Burger menu + Logo */}
@@ -59,7 +58,6 @@ const Navbar = memo(() => {
         {/* Right: Profile Button */}
         <nav className="flex items-center space-x-2">
           <ProfileButton />
-          <ThemeToggle />
         </nav>
       </header>
       {/* Search Modal for mobile */}

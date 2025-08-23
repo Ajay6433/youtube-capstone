@@ -30,9 +30,9 @@ export default function MainLayout() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-100 text-center text-sm py-4 border-t">
+      {/* <footer className="bg-gray-100 text-center text-sm py-4 border-t">
         &copy; {new Date().getFullYear()} YouTube Clone by You
-      </footer>
+      </footer> */}
     </div>
   );
 }
