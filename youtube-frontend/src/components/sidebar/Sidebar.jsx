@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Logo from "../header/Logo";
-import { mainMenu, youMenu, exploreMenu } from "./SidebarMenu";
+import { mainMenu, youMenu, exploreMenu, miscellaneousMenu } from "./SidebarMenu";
 
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -56,7 +56,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                         })
                     }
                     <div className="border-t my-2"></div>
-                    <div className="text-xs text-gray-500 px-4">You</div>
+                    <div className="text-lg text-reguler px-4">You</div>
                     {
                         youMenu.map((menu) => {
                             return (<nav className="p-4 space-y-4">
@@ -67,16 +67,17 @@ const Sidebar = ({ isOpen, onClose }) => {
                     }
                     <div className="border-t my-2"></div>
                     <div className="text-xs text-gray-500 px-4">Explore</div>
-                    {
-                        exploreMenu.map((menu) => {
-                            return (<nav className="p-4 space-y-4">
-                                <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
-                            </nav>
-                            )
-                        })
-                    }
-
-                </div>            </div>
+                        {
+                            exploreMenu.map((menu) => {
+                                return (<nav className="p-4 space-y-4">
+                                    <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
+                                </nav>
+                                )
+                            })
+                        }
+                    </div>     
+                          
+            </div>
         </div>
     );
 };

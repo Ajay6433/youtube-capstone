@@ -3,6 +3,7 @@ import BurgerMenu from "./BurgerMenu";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import ProfileButton from "./ProfileButton";
+import { useRef } from "react";
 import SearchToggle from "./SearchToggle";
 import SearchModal from "./SearchModal";
 import Sidebar from "../sidebar/Sidebar";
@@ -11,6 +12,8 @@ const Navbar = memo(() => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const profileModalRef = useRef(null);
 
   // Handle window resize
   useEffect(() => {
@@ -57,8 +60,32 @@ const Navbar = memo(() => {
 
         {/* Right: Profile Button */}
         <nav className="flex items-center space-x-2">
-          <ProfileButton />
+          <ProfileButton onClick={() => setShowProfileModal(true)} />
         </nav>
+        {/* Profile Modal */}
+        {showProfileModal && (
+          <div ref={profileModalRef} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 min-w-[250px] flex flex-col items-center">
+              <div className="mb-4 font-semibold text-lg">Profile</div>
+              <button
+                className="btn btn-error w-full"
+                onClick={() => {
+                  localStorage.clear();
+                  setShowProfileModal(false);
+                  window.location.reload();
+                }}
+              >
+                Sign Out
+              </button>
+              <button
+                className="btn btn-ghost mt-2 w-full"
+                onClick={() => setShowProfileModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </header>
       {/* Search Modal for mobile */}
       {showSearchBar && (
