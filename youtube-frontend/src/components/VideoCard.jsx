@@ -1,24 +1,36 @@
+import { Form } from "react-router-dom";
+import formatNumber from "../utils/FormatNumber";
+
 export default function VideoCard({ video }) {
+  console.log(video);
   return (
-    <div className="bg-white rounded-lg shadow hover:shadow-lg transition duration-200">
-      <a href={`/videos/${video._id}`}>
+    <div className="w-full max-w-sm cursor-pointer">
+      {/* Thumbnail */}
+      <a href={`/videos/${video._id}`} className="block">
         <img
           src={video.thumbnail}
           alt={video.title}
-          className="w-full h-48 object-cover rounded-t-lg"
+          className="w-full h-64 object-cover rounded-xl hover:scale-105 transition-transform duration-300"
         />
       </a>
-      <div className="p-3 flex">
+
+      {/* Video info */}
+      <div className="flex mt-3">
+        {/* Channel avatar */}
         <img
-          src={video.avatar || "/default-avatar.png"} // fallback avatar
+          src={video.avatar || "/default-avatar.png"}
           alt={video.channelName}
-          className="w-10 h-10 rounded-full mr-3"
+          className="w-10 h-10 rounded-full flex-shrink-0 mr-3"
         />
-        <div>
-          <h3 className="text-sm font-semibold text-gray-800">{video.title}</h3>
-          <p className="text-xs text-gray-600">{video.channelName}</p>
-          <p className="text-xs text-gray-500">
-            {video.views} views • {video.likes} likes
+
+        {/* Text details */}
+        <div className="flex flex-col overflow-hidden">
+          <h3 className="text-lg font-semibold text-gray-900 leading-snug line-clamp-2">
+            {video.title}
+          </h3>
+          <p className="text-sm text-gray-600">{video.channelName}</p>
+          <p className="text-sm text-gray-500">
+            {formatNumber(video.views)} views · {formatNumber(video.likes)} likes
           </p>
         </div>
       </div>
