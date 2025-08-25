@@ -64,11 +64,11 @@ const Navbar = memo(() => {
         </nav>
         {/* Profile Modal */}
         {showProfileModal && (
-          <div ref={profileModalRef} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 min-w-[250px] flex flex-col items-center">
-              <div className="mb-4 font-semibold text-lg">Profile</div>
+          <div ref={profileModalRef} className="absolute right-4 top-14 z-50">
+            <div className="bg-white dark:bg-gray-100 rounded-lg shadow-lg p-4 min-w-[200px] flex flex-col items-center border border-gray-100 dark:border-gray-700">
+              <div className="mb-2 font-semibold text-base">Profile</div>
               <button
-                className="btn btn-error w-full"
+                className="btn btn-error w-full mb-2"
                 onClick={() => {
                   localStorage.clear();
                   setShowProfileModal(false);
@@ -78,7 +78,7 @@ const Navbar = memo(() => {
                 Sign Out
               </button>
               <button
-                className="btn btn-ghost mt-2 w-full"
+                className="btn btn-ghost w-full"
                 onClick={() => setShowProfileModal(false)}
               >
                 Cancel

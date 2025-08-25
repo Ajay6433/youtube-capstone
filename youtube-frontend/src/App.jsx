@@ -10,7 +10,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path="video/:id" element={<VideoPlayer />} />
+          <Route path="videos/:id" element={<VideoPlayer />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
           {/* <Route path="signup" element={<Signup />} /> */}

@@ -25,8 +25,12 @@ export default function Home() {
   }
 
   return (
-    <div className="p-4">
+
+    <div>
+      <div></div>
+      <div className="p-4">
       <VideoGrid videos={videos} />
+    </div>
     </div>
   );
 }
