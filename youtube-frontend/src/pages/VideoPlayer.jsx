@@ -1,11 +1,10 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import api from "../api/api";
 import { BiLike , BiDislike  } from "react-icons/bi";
 import { TbShare3 } from "react-icons/tb";
 
-import VideoGrid from "../components/VideoGrid";
+import SuggestedVideos from "../components/videoPlayer/SuggestedVideos";
 import { useVideos } from "../context/VideoContext";
 
 
@@ -14,6 +13,7 @@ export default function VideoPlayer() {
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const {videos} = useVideos();
+
   // Mock comments for now
   const [comments] = useState([
     { user: "Alice", text: "Great video!", avatar: "/default-avatar.png" },
@@ -22,19 +22,14 @@ export default function VideoPlayer() {
   ]);
 
   useEffect(() => {
-    const fetchVideo = async () => {
-      try {
-        const res = await api.get(`/videos/${id}`);
-        setVideo(res.data.video);
-        console.log(res.data.video);
-      } catch (error) {
-        console.error("Error fetching video:", error.response?.data || error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchVideo();
-  }, [id]);
+    if (videos.length > 0) {
+      const currentVideo = videos.find((v) => v._id === id);
+      setVideo(currentVideo);
+      setLoading(false);
+    }
+  }, [id, videos]);
+
+  const filteredVideos = videos.filter(v => v._id !== id);
 
   if (loading) {
     return <p className="text-center mt-10">Loading video...</p>;
@@ -52,7 +47,7 @@ export default function VideoPlayer() {
           {/* Video Player */}
           <div className="w-full aspect-[16/9] bg-black rounded-xl overflow-hidden mb-4">
             <iframe
-              src={video.video}
+              src={`${video.video}?autoplay=1&mute=1`}
               title={video.title}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -67,7 +62,8 @@ export default function VideoPlayer() {
 
           {/* Channel Info & Subscribe */}
           <div className="flex items-center justify-between gap-4 mt-4 mb-4 w-full">
-            <img
+            <div className="flex items-center justify-start gap-4">
+              <img
               src={video.avatar || "/default-avatar.png"}
               alt={video.channelName}
               className="w-12 h-12 rounded-full"x
@@ -75,12 +71,9 @@ export default function VideoPlayer() {
             <div className="flex flex-col justify-center">
               <div className="flex items-center gap-1">
                 <h2 className="font-semibold text-base">{video.channelName}</h2>
-                {/* Verified icon if available */}
-                {video.verified && (
-                  <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2l2.39 4.84L18 7.27l-3.91 3.81L15.18 18 10 14.77 4.82 18l1.09-6.92L2 7.27l5.61-.43L10 2z"/></svg>
-                )}
               </div>
               <span className="text-xs text-gray-500">{video.subscribers || '988K'} subscribers</span>
+            </div>
             </div>
             <button className="ml-4 bg-red-600 text-white px-6 py-2 rounded-full font-semibold text-base hover:bg-gray-900 transition">
               Subscribe
@@ -138,7 +131,7 @@ export default function VideoPlayer() {
       </main>
       {/* VideoGrid on the right, single column */}
       <aside className="hidden md:flex flex-col w-96 p-4 space-y-4 border-l">
-        <VideoGrid singleColumn videos={videos} />
+        <SuggestedVideos videos={filteredVideos} />
       </aside>
     </div>
   );
