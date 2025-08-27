@@ -2,14 +2,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/api";
+import { BiLike , BiDislike  } from "react-icons/bi";
+import { TbShare3 } from "react-icons/tb";
 
 import VideoGrid from "../components/VideoGrid";
+import { useVideos } from "../context/VideoContext";
 
 
 export default function VideoPlayer() {
   const { id } = useParams();
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const {videos} = useVideos();
   // Mock comments for now
   const [comments] = useState([
     { user: "Alice", text: "Great video!", avatar: "/default-avatar.png" },
@@ -59,30 +63,59 @@ export default function VideoPlayer() {
 
           {/* Video Info */}
           <h1 className="text-2xl font-bold mb-1">{video.title}</h1>
-          <div className="flex flex-wrap items-center text-sm mb-2">
-            <span>{video.views} views</span>
-            <span className="mx-2">•</span>
-            <span>{video.likes} likes</span>
-          </div>
+          
 
           {/* Channel Info & Subscribe */}
-          <div className="flex items-center mt-4 mb-4">
+          <div className="flex items-center justify-between gap-4 mt-4 mb-4 w-full">
             <img
               src={video.avatar || "/default-avatar.png"}
               alt={video.channelName}
-              className="w-12 h-12 rounded-full mr-3"
+              className="w-12 h-12 rounded-full"x
             />
-            <div>
-              <h2 className="font-medium ">{video.channelName}</h2>
-              <p className="text-xs ">{video.handle}</p>
+            <div className="flex flex-col justify-center">
+              <div className="flex items-center gap-1">
+                <h2 className="font-semibold text-base">{video.channelName}</h2>
+                {/* Verified icon if available */}
+                {video.verified && (
+                  <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2l2.39 4.84L18 7.27l-3.91 3.81L15.18 18 10 14.77 4.82 18l1.09-6.92L2 7.27l5.61-.43L10 2z"/></svg>
+                )}
+              </div>
+              <span className="text-xs text-gray-500">{video.subscribers || '988K'} subscribers</span>
             </div>
-            <button className="ml-auto bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition font-semibold">
+            <button className="ml-4 bg-red-600 text-white px-6 py-2 rounded-full font-semibold text-base hover:bg-gray-900 transition">
               Subscribe
             </button>
+            {/* Action buttons */}
+              <div className="flex items-center gap-2 ml-4">
+                {/* Like/Dislike pill */}
+                <div className="flex items-center bg-gray-100 rounded-full overflow-hidden border border-gray-200">
+                  <button className="flex items-center px-4 py-2 text-sm font-medium hover:bg-gray-200 focus:outline-none">
+                    <BiLike className="w-5 h-5 mr-1" />
+                    {video.likes || '266K'}
+                  </button>
+                  <div className="w-px h-6 bg-gray-300" />
+                  <button className="flex items-center px-4 py-2 text-sm font-medium hover:bg-gray-200 focus:outline-none">
+                    <BiDislike className="w-5 h-5 mr-1" />
+                    {video.dislikes || '26'}
+                  </button>
+                </div>
+              <button className="flex items-center bg-gray-100 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-200">
+                <TbShare3 className="w-5 h-5 mr-1" />
+                Share
+              </button>
+              <button className="flex items-center bg-gray-100 px-2 py-2 rounded-full hover:bg-gray-200">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="4" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="10" cy="16" r="2"/></svg>
+              </button>
+            </div>
           </div>
 
           {/* Description */}
           <div className="bg-gray-100 text-gray-700 rounded-lg p-4  mb-6">
+            <div className="flex flex-wrap items-center text-sm mb-2">
+            <span>{video.views} views</span>
+            <span className="mx-2">•</span>
+            <span>{video.likes} likes</span>
+          </div>
             {video.description}
           </div>
 
@@ -105,7 +138,7 @@ export default function VideoPlayer() {
       </main>
       {/* VideoGrid on the right, single column */}
       <aside className="hidden md:flex flex-col w-96 p-4 space-y-4 border-l">
-        <VideoGrid singleColumn />
+        <VideoGrid singleColumn videos={videos} />
       </aside>
     </div>
   );
