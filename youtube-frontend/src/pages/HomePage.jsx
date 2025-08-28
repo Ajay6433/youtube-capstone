@@ -1,5 +1,6 @@
 import {useVideos} from "../context/VideoContext";
 import VideoGrid from "../components/VideoGrid";
+import HomeSidebar from "../components/sidebar/HomeSidebar";
 
 export default function Home() {
   const { videos, loading } = useVideos();
@@ -10,9 +11,10 @@ export default function Home() {
 
   return (
 
-    <div>
+    <div className="flex bg-white mt-16 min-h-screen">
       <div></div>
-      <div className="p-4">
+      <HomeSidebar />
+      <div className="p-4 md:ml-20 flex-1 overflow-y-auto">
         <VideoGrid videos={videos} />
     </div>
     </div>

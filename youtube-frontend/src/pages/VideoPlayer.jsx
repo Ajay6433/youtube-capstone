@@ -43,7 +43,7 @@ export default function VideoPlayer() {
   <div className="flex bg-white mt-16 min-h-screen">
       {/* Main video area */}
       <main className="flex-1 flex flex-col items-center px-2 md:px-8 py-8">
-        <div className="w-full max-w-3xl">
+        <div className="w-full max-w-2xl">
           {/* Video Player */}
           <div className="w-full aspect-[16/9] bg-black rounded-xl overflow-hidden mb-4">
             <iframe
@@ -130,7 +130,7 @@ export default function VideoPlayer() {
         </div>
       </main>
       {/* VideoGrid on the right, single column */}
-      <aside className="hidden md:flex flex-col w-96 p-4 space-y-4 border-l">
+      <aside className="hidden md:flex flex-col w-116 p-4 space-y-4 ">
         <SuggestedVideos videos={filteredVideos} />
       </aside>
     </div>

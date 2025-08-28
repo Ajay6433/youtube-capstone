@@ -10,7 +10,7 @@ export default function VideoCard({ video }) {
         <img
           src={video.thumbnail}
           alt={video.title}
-          className="w-full h-64 object-cover rounded-xl hover:scale-105 transition-transform duration-300"
+          className="w-full h-64 object-cover rounded-xl hover:rounded-none duration-500"
         />
       </a>
 
