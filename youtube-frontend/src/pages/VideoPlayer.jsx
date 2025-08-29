@@ -6,6 +6,7 @@ import { TbShare3 } from "react-icons/tb";
 
 import SuggestedVideos from "../components/videoPlayer/SuggestedVideos";
 import { useVideos } from "../context/VideoContext";
+import Comments from "../components/videoPlayer/Comments";
 
 
 export default function VideoPlayer() {
@@ -114,18 +115,7 @@ export default function VideoPlayer() {
 
           {/* Comments Section */}
           <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-4">Comments</h3>
-            <div className="space-y-4">
-              {comments.map((c, i) => (
-                <div key={i} className="flex items-start">
-                  <img src={c.avatar} alt={c.user} className="w-9 h-9 rounded-full mr-3" />
-                  <div className="flex-1">
-                    <div className="font-medium">{c.user}</div>
-                    <div className="text-sm">{c.text}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <Comments comments={comments} />
           </div>
         </div>
       </main>

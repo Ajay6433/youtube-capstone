@@ -3,6 +3,8 @@ import BurgerMenu from "./BurgerMenu";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import ProfileButton from "./ProfileButton";
+import UserContext from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import SearchToggle from "./SearchToggle";
 import SearchModal from "./SearchModal";
@@ -14,6 +16,8 @@ const Navbar = memo(() => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const profileModalRef = useRef(null);
+  const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+  const navigate = useNavigate();
 
   // Handle window resize
   useEffect(() => {
@@ -58,12 +62,21 @@ const Navbar = memo(() => {
           </div>
         </div>
 
-        {/* Right: Profile Button */}
+        {/* Right: Profile Button or Login */}
         <nav className="flex items-center space-x-2">
-          <ProfileButton onClick={() => setShowProfileModal(true)} />
+          {user ? (
+            <ProfileButton onClick={() => setShowProfileModal(true)} />
+          ) : (
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          )}
         </nav>
         {/* Profile Modal */}
-        {showProfileModal && (
+        {user && showProfileModal && (
           <div ref={profileModalRef} className="absolute right-4 top-14 z-50">
             <div className="bg-white dark:bg-gray-100 rounded-lg shadow-lg p-4 min-w-[200px] flex flex-col items-center border border-gray-100 dark:border-gray-700">
               <div className="mb-2 font-semibold text-base">Profile</div>
