@@ -15,13 +15,6 @@ export default function VideoPlayer() {
   const [loading, setLoading] = useState(true);
   const {videos} = useVideos();
 
-  // Mock comments for now
-  const [comments] = useState([
-    { user: "Alice", text: "Great video!", avatar: "/default-avatar.png" },
-    { user: "Bob", text: "Very informative.", avatar: "/default-avatar.png" },
-    { user: "Charlie", text: "Loved the editing!", avatar: "/default-avatar.png" },
-  ]);
-
   useEffect(() => {
     if (videos.length > 0) {
       const currentVideo = videos.find((v) => v._id === id);
@@ -115,7 +108,7 @@ export default function VideoPlayer() {
 
           {/* Comments Section */}
           <div className="mt-6">
-            <Comments comments={comments} />
+            <Comments videoId={video._id} />
           </div>
         </div>
       </main>

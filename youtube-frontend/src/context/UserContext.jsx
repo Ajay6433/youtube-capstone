@@ -11,7 +11,7 @@ export default function UserProvider({ children }) {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
-      toast.success(`Welcome back, ${JSON.parse(savedUser).name}`);
+      toast.success(`Welcome back, ${JSON.parse(savedUser).user.name}`);
       
     }
   }, []);

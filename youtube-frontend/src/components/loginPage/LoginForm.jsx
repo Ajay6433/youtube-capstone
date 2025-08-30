@@ -24,7 +24,7 @@ export default function Login() {
     try {
       const res = await api.post("/auth/login", formData, { withCredentials: true });
       toast.success("Login successful!");
-      login(res.data.user);
+      login(res.data);
       window.location.href = "/";
     } catch (error) {
       const msg = error.response?.data?.message || "Login failed!";

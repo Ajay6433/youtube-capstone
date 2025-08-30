@@ -1,26 +1,37 @@
-
-
 import { useState, useEffect } from "react";
 import api from "../../api/api";
+import { BiLike, BiDislike } from "react-icons/bi";
 
 
 // videoId should be passed as a prop from VideoPlayer
-export default function Comments({ videoId }) {
+export default function Comments({ comment, videoId }) {
 	const user = localStorage.getItem("user");
-	const [comments, setComments] = useState([]);
+	const parsedUser = user ? JSON.parse(user) : null;
+	const [comments, setComments] = useState(comment || []);
 	const [input, setInput] = useState("");
 	const [editingId, setEditingId] = useState(null);
 	const [editText, setEditText] = useState("");
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 
+
+
+	const mockComments = [
+		{ _id: "1", user: { name: "Alice", username: "alice123" }, text: "Great video!", avatar: "/default-avatar.png", likes: 2, liked: false, date: "2023-10-01" },
+		{ _id: "2", user: { name: "Bob", username: "bob456" }, text: "Very informative.", avatar: "/default-avatar.png", likes: 5, liked: false, date: "2023-10-02" },
+		{ _id: "3", user: { name: "Charlie", username: "charlie789" }, text: "Loved the editing!", avatar: "/default-avatar.png", likes: 1, liked: false, date: "2023-10-03" },
+	];
+
 	// Fetch comments on mount or when videoId changes
 	useEffect(() => {
 		const fetchComments = async () => {
 			setLoading(true);
+			console.log(videoId)
 			try {
 				const res = await api.get(`/comments/${videoId}`);
-				setComments(res.data.comments || []);
+				console.log(res.data.comments);
+				setComments(res.data.comments.length > 0 ? res.data.comments : mockComments);
+				// if(res.data.comments.length === 0) setComments(mockComments)
 			} catch (err) {
 				setError("Failed to load comments.");
 			} finally {
@@ -35,7 +46,16 @@ export default function Comments({ videoId }) {
 		e.preventDefault();
 		if (!input.trim()) return;
 		try {
-			const res = await api.post(`/comments/${videoId}`, { text: input.trim() });
+			const token = parsedUser?.token; // or localStorage.getItem("token")
+			const res = await api.post(
+				`/comments/${videoId}`,
+				{ text: input.trim() },
+				{
+					headers: {
+						Authorization: `JWT ${token}`,
+					},
+				}
+			);
 			setComments([res.data.comment, ...comments]);
 			setInput("");
 		} catch (err) {
@@ -88,13 +108,13 @@ export default function Comments({ videoId }) {
 			<div className="flex items-center justify-between mb-4">
 				<h3 className="text-xl font-bold">{comments.length} Comments</h3>
 				<div className="flex items-center gap-2 text-gray-600">
-					<svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+					<svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
 					<span>Sort by</span>
 				</div>
 			</div>
-			{user && (
+			{parsedUser && (
 				<form onSubmit={handleAdd} className="flex items-center gap-2 mb-6">
-					<img src={user.avatar || "/default-avatar.png"} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
+					<img src={parsedUser.user.avatar || "/default-avatar.png"} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
 					<input
 						type="text"
 						className="flex-1 border-b border-gray-300 px-3 py-2 focus:outline-none focus:border-black bg-transparent"
@@ -110,11 +130,11 @@ export default function Comments({ videoId }) {
 			<div className="space-y-6">
 				{comments.map((c) => (
 					<div key={c._id} className="flex items-start gap-4 group">
-						<img src={c.avatar || "/default-avatar.png"} alt={c.user?.name || c.user?.username || "User"} className="w-10 h-10 rounded-full object-cover" />
+						<img src={c.user.avatar || "/default-avatar.png"} alt={c.user?.name || c.user?.username || "User"} className="w-10 h-10 rounded-full object-cover" />
 						<div className="flex-1 min-w-0">
 							<div className="flex items-center gap-2">
 								<span className="font-semibold text-sm">@{c.user?.name || c.user?.username || "User"}</span>
-								<span className="text-xs text-gray-500">{c.date || c.createdAt?.slice(0,10)}</span>
+								<span className="text-xs text-gray-500">{c.date || c.createdAt?.slice(0, 10)}</span>
 							</div>
 							{editingId === c._id ? (
 								<div className="flex gap-2 mt-1">
@@ -142,11 +162,11 @@ export default function Comments({ videoId }) {
 									className={`flex items-center gap-1 hover:text-blue-600 ${c.liked ? "text-blue-600" : ""}`}
 									onClick={() => handleLike(c._id)}
 								>
-									<svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 14V7a2 2 0 012-2h5.28a2 2 0 011.95 2.42l-.7 3.16a1 1 0 00.2.88l2.1 2.53a1 1 0 01-.76 1.63H7.21a1 1 0 01-.98-1.2z" /></svg>
+									<BiLike className="w-4 h-4 mr-1" />
 									{c.likes || 0}
 								</button>
 								<button className="flex items-center gap-1 hover:text-blue-600">
-									<svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 10v7a2 2 0 01-2 2h-5.28a2 2 0 01-1.95-2.42l.7-3.16a1 1 0 00-.2-.88l-2.1-2.53A1 1 0 017.21 9h9.03a1 1 0 01.98 1.2z" /></svg>
+									<BiDislike className="w-4 h-4 mr-1" />
 								</button>
 								<button className="hover:underline">Reply</button>
 								{user && c.user && (c.user._id === user._id) && (
@@ -158,7 +178,7 @@ export default function Comments({ videoId }) {
 							</div>
 						</div>
 						<button className="opacity-0 group-hover:opacity-100 transition text-gray-500 p-2">
-							<svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="4" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="10" cy="16" r="2"/></svg>
+							<svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" /><circle cx="10" cy="10" r="2" /><circle cx="10" cy="16" r="2" /></svg>
 						</button>
 					</div>
 				))}
