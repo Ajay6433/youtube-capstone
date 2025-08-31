@@ -6,7 +6,7 @@ import { TbShare3 } from "react-icons/tb";
 
 import SuggestedVideos from "../components/videoPlayer/SuggestedVideos";
 import { useVideos } from "../context/VideoContext";
-import Comments from "../components/videoPlayer/Comments";
+// import Comments from "../components/videoPlayer/Comments";
 
 
 export default function VideoPlayer() {
@@ -108,7 +108,7 @@ export default function VideoPlayer() {
 
           {/* Comments Section */}
           <div className="mt-6">
-            <Comments videoId={video._id} />
+            {/* <Comments videoId={video._id} /> */}
           </div>
         </div>
       </main>
