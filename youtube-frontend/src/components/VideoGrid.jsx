@@ -7,7 +7,7 @@ export default function VideoGrid({ videos, singleColumn }) {
   const gridClass = singleColumn ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3";
 
   return (
-    <div className={`grid ${gridClass} gap-6`}>
+    <div className={`grid ${gridClass} gap-4 sm:gap-6 px-2 sm:px-0`}>
       {videos.map((video) => (
         <VideoCard key={video._id} video={video} />
       ))}
