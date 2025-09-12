@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/HomePage";
-// import Signup from "./pages/signUp/Signup";
+import Signup from "./pages/SignupPage";
 import VideoPlayer from "./pages/VideoPlayer";
 import LoginPage from "./pages/LoginPage";
 export default function App() {
@@ -13,7 +13,7 @@ export default function App() {
           <Route path="videos/:id" element={<VideoPlayer />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
-          {/* <Route path="signup" element={<Signup />} /> */}
+          <Route path="signup" element={<Signup />} />
       </Routes>
     </Router>
   );

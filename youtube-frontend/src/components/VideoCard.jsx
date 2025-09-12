@@ -2,7 +2,7 @@ import { Form } from "react-router-dom";
 import formatNumber from "../utils/FormatNumber";
 
 export default function VideoCard({ video }) {
-  console.log(video);
+  // console.log(video);
   return (
     <div className="w-full max-w-sm cursor-pointer">
       {/* Thumbnail */}

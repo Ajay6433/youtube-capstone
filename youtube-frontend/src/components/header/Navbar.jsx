@@ -9,12 +9,15 @@ import { useRef } from "react";
 import SearchToggle from "./SearchToggle";
 import SearchModal from "./SearchModal";
 import Sidebar from "../sidebar/Sidebar";
+import ChannelModal from "./ChannelModal";
+import CreateOrMyChannelButton from "./CreateOrMyChannelButton";
 
 const Navbar = memo(() => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showChannelModal, setShowChannelModal] = useState(false);
   const profileModalRef = useRef(null);
   const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
   const navigate = useNavigate();
@@ -56,6 +59,15 @@ const Navbar = memo(() => {
           <div className="hidden sm:flex justify-center w-full">
             <SearchBar />
           </div>
+          {/* channel create button */}
+          {/* {user && (
+            <button className="flex items-center gap-2 lg:ml-8 px-4 py-2 bg-gray-100 rounded-full hover:bg-gray-200 transition
+            " onClick={() => setShowChannelModal(!showChannelModal)}>
+              <span className="text-xl font-bold">+</span>
+              <span className="text-black font-medium">Create</span>
+            </button>
+          )} */}
+          <CreateOrMyChannelButton user={user} setShowChannelModal={setShowChannelModal} />
           {/* Mobile: show SearchToggle */}
           <div className="sm:hidden">
             <SearchToggle setShowSearchBar={setShowSearchBar} />
@@ -99,14 +111,18 @@ const Navbar = memo(() => {
             </div>
           </div>
         )}
+       
       </header>
       {/* Search Modal for mobile */}
       {showSearchBar && (
         <SearchModal setShowSearchBar={setShowSearchBar} />
       )}
-       {/* Sidebar */}
+      {/* Sidebar */}
       <Sidebar isOpen={showSidebar} onClose={() => setShowSidebar(false)} />
-
+      {/* Channel Modal */}
+      {showChannelModal && (
+        <ChannelModal setShowChannelModal={setShowChannelModal} />
+      )}
     </>
   );
 });

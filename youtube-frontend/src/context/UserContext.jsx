@@ -8,30 +8,31 @@ export default function UserProvider({ children }) {
 
   // Load user from localStorage on page load
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-      toast.success(`Welcome back, ${JSON.parse(savedUser).user.name}`);
-      
-    }
+    const storedUser = localStorage.getItem("user");
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+
+    const name = parsedUser?.user?.name || parsedUser?.name || null;
+
+    toast.success(`Welcome back, ${name}`);
+    setUser(parsedUser);
   }, []);
 
-  const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
-  };
+const login = (userData) => {
+  localStorage.setItem("user", JSON.stringify(userData));
+  setUser(userData);
+};
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    toast.success("Logout successful!");
-    // Redirect to login page after logout
-    window.location.href = "/login";
-  };
+const logout = () => {
+  localStorage.removeItem("user");
+  setUser(null);
+  toast.success("Logout successful!");
+  // Redirect to login page after logout
+  window.location.href = "/login";
+};
 
-  return (
-    <UserContext.Provider value={{ user, login, logout }}>
-      {children}
-    </UserContext.Provider>
-  );
+return (
+  <UserContext.Provider value={{ user, login, logout }}>
+    {children}
+  </UserContext.Provider>
+);
 }

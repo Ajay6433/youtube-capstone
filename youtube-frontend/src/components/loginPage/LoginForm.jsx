@@ -23,6 +23,20 @@ export default function Login() {
     setLoading(true);
     try {
       const res = await api.post("/auth/login", formData, { withCredentials: true });
+      // ✅ Try fetching channel but handle 404 gracefully
+      let channel = null;
+      try {
+        const channelRes = await api.get(`/channel/${res.data.user.id}`);
+        channel = channelRes.data.channel;
+        localStorage.setItem("channel", JSON.stringify(channel));
+      } catch (channelError) {
+        if (channelError.response?.status === 404) {
+          console.log("No channel found for this user. This is fine.");
+          localStorage.removeItem("channel"); // clear stale channel if any
+        } else {
+          console.error("Error fetching channel:", channelError);
+        }
+      }
       toast.success("Login successful!");
       login(res.data);
       window.location.href = "/";
@@ -76,14 +90,13 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full sm:w-3/4 bg-red-600 text-white py-3 rounded-full transition text-sm sm:text-base ${
-              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-red-700"
-            }`}
+            className={`w-full sm:w-3/4 bg-red-600 text-white py-3 rounded-full transition text-sm sm:text-base ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-red-700"
+              }`}
           >
             {loading ? "Logging in..." : "Continue to Login"}
           </button>
         </div>
-        <hr/>
+        <hr />
         <p className="text-center text-sm mb-4 sm:mb-6">or</p>
         <div className="flex justify-center mb-4 sm:mb-6">
           <GoogleLoginButton />

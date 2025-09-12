@@ -24,7 +24,7 @@ const Comments = (videoId) => {
             }
         };
         if (videoId) fetchComments();
-    }, [videoId]);
+    }, [videoId, comments]);
 
 
     // Add comment
@@ -140,19 +140,28 @@ const Comments = (videoId) => {
             )}
 
             {isEditOpen && editingComment && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
-                        <h2 className="text-lg font-semibold mb-4">Edit Comment</h2>
+                <div
+                    className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+                    onClick={() => setIsEditOpen(false)} // close when clicking outside
+                >
+                    <div
+                        className="bg-white rounded-2xl p-5 w-full max-w-md shadow-xl transform transition-all duration-200 scale-100 hover:scale-[1.01]"
+                        onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+                    >
+                        <h2 className="text-lg font-semibold text-gray-800 mb-3">Edit Comment</h2>
+
                         <textarea
                             value={editText}
                             onChange={(e) => setEditText(e.target.value)}
-                            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-200"
+                            className="w-full border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-50"
                             rows="4"
+                            autoFocus
                         />
-                        <div className="flex justify-end gap-3 mt-4">
+
+                        <div className="flex justify-end gap-2 mt-4">
                             <button
                                 onClick={() => setIsEditOpen(false)}
-                                className="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-100"
+                                className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition text-sm"
                             >
                                 Cancel
                             </button>
@@ -161,7 +170,7 @@ const Comments = (videoId) => {
                                     await handleEdit(editingComment._id, editText);
                                     setIsEditOpen(false);
                                 }}
-                                className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition text-sm"
                             >
                                 Save
                             </button>
@@ -169,6 +178,7 @@ const Comments = (videoId) => {
                     </div>
                 </div>
             )}
+
 
             <div className="space-y-6">
                 {comments.map((comment) => (
@@ -194,10 +204,12 @@ const Comments = (videoId) => {
                                     <BiDislike className="w-4 h-4 mr-1" />
                                 </button>
                                 <button className="hover:underline">Reply</button>
-                                <div className="relative ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                                    {/* 3-dot button */}
+                                <div className="relative ml-auto">
+                                    {/* 3-dot button - always visible */}
                                     <button
-                                        onClick={() => setActiveComment(comment._id)} // set which comment's menu is open
+                                        onClick={() =>
+                                            setActiveComment(activeComment === comment._id ? null : comment._id)
+                                        }
                                         className="flex items-center p-1 rounded-full hover:bg-gray-100 transition"
                                     >
                                         <svg
@@ -211,18 +223,24 @@ const Comments = (videoId) => {
                                         </svg>
                                     </button>
 
-                                    {/* Dropdown tooltip */}
+                                    {/* Dropdown tooltip - visible only when clicked */}
                                     {activeComment === comment._id && (
                                         <div className="absolute right-0 mt-2 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                                             <button
-                                                onClick={() => openEditModal(comment)} // ✅ open modal
+                                                onClick={() => {
+                                                    openEditModal(comment); // or open inline edit mode
+                                                    setActiveComment(null);
+                                                }}
                                                 className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
                                             >
                                                 ✏️ Edit
                                             </button>
 
                                             <button
-                                                onClick={() => handleDelete(comment._id)}
+                                                onClick={() => {
+                                                    handleDelete(comment._id);
+                                                    setActiveComment(null);
+                                                }}
                                                 className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                                             >
                                                 🗑️ Delete
@@ -230,6 +248,7 @@ const Comments = (videoId) => {
                                         </div>
                                     )}
                                 </div>
+
 
                             </div>
                         </div>

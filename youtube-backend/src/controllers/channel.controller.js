@@ -28,19 +28,21 @@
   }
   
 
-  // Get channel by ID
-  export async function getChannel(req, res) {
-    try {
-      const channel = await Channel.findById(req.params.id)
-        .populate('owner', 'name email avatar'); // fetch basic user info
+  // controllers/channelController.js
+export async function getChannelByUser(req, res) {
+  try {
+    const { userId } = req.params;
 
-      if (!channel) {
-        return res.status(404).json({ message: 'Channel not found' });
-      }
+    const channel = await Channel.findOne({ owner: userId })
+      .populate("owner", "name email avatar username"); // ✅ get owner details too
 
-      return res.status(200).json({ channel });
-    } catch (error) {
-      console.error("Error fetching channel:", error);
-      return res.status(500).json({ message: 'Internal server error', error: error.message });
+    if (!channel) {
+      return res.status(404).json({ message: "No channel found for this user" });
     }
+
+    return res.status(200).json({ channel });
+  } catch (error) {
+    console.error("Error fetching channel by user:", error);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
+}
