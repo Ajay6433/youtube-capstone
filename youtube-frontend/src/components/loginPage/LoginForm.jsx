@@ -26,7 +26,7 @@ export default function Login() {
       // ✅ Try fetching channel but handle 404 gracefully
       let channel = null;
       try {
-        const channelRes = await api.get(`/channel/${res.data.user.id}`);
+        const channelRes = await api.get(`/channel/owner/${res.data.user.id}`);
         channel = channelRes.data.channel;
         localStorage.setItem("channel", JSON.stringify(channel));
       } catch (channelError) {

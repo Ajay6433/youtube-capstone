@@ -14,17 +14,18 @@ const Comments = (videoId) => {
     const [editingComment, setEditingComment] = useState(null);
     const [editText, setEditText] = useState("");
 
-    useEffect(() => {
-        const fetchComments = async () => {
-            try {
-                const res = await api.get(`/comments/${videoId.videoId}`);
-                setComments(res.data.comments);
-            } catch (err) {
-                console.error("Failed to load comments.");
-            }
-        };
-        if (videoId) fetchComments();
-    }, [videoId, comments]);
+   useEffect(() => {
+  const fetchComments = async () => {
+    try {
+      const res = await api.get(`/comments/${videoId.videoId}`);
+      setComments(res.data.comments);
+    } catch (err) {
+      console.error("Failed to load comments.");
+    }
+  };
+
+  if (videoId) fetchComments();
+}, [videoId]); // ✅ remove comments from dependency array
 
 
     // Add comment

@@ -1,10 +1,8 @@
 import { Form } from "react-router-dom";
-import formatNumber from "../utils/FormatNumber";
-import { UserContext } from "../context/UserContext";
-import api from "../api/api";
+import formatNumber from "../../utils/FormatNumber"
+import api from "../../api/api";
 
-export default function VideoCard({ video }) {
-  console.log("Rendering VideoCard for video:", video.channelId._id);
+export default function ChannelVideoCard({ video }) {
 
   async function channelPageDetails() {
     let channel = await api.get(`/channel/${video.channelId._id}`);

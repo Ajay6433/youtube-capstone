@@ -1,23 +1,32 @@
-import {useState, useEffect } from "react";
-import api from "../api/api";
-import VideoGrid from "../components/VideoGrid";
-
+import { useMemo, useContext } from "react";
+import { useVideos } from "../context/VideoContext";
+import ChannelVideoGrid from "../components/channelPage/ChannelVideoGrid";
+import { UserContext } from "../context/UserContext";
 
 export default function ChannelPage() {
-  const [channelVideos, setChannelVideos] = useState([]);
-  let channel = localStorage.getItem("channel");
+  const { videos } = useVideos();
+  const {user} = useContext(UserContext);
+  console.log("User from context:", user);
+
+  // Get channel from localStorage
+  let channel = sessionStorage.getItem("channel");
   channel = channel ? JSON.parse(channel) : null;
+
   if (!channel) {
     window.location.href = "/";
   }
-  useEffect( () => {
-   async function fetchChannelVideos() {
-        let response = await api.get(`/videos/channel/${channel._id}`);
-        console.log(response.data.videos);
-        setChannelVideos(response.data.videos);
-      }
-      fetchChannelVideos();
-  }, []);
+
+  // ✅ useMemo to compute filtered videos based on uploader
+  const channelVideos = useMemo(() => {
+    if (!videos || !channel) return [];
+    return videos.filter(
+      (video) => String(video.uploader._id) === String(channel.owner._id)
+    );
+  }, [videos, channel?.owner?._id]);
+
+
+
+
   return (
     <div className="w-full">
       {/* Banner */}
@@ -39,9 +48,17 @@ export default function ChannelPage() {
             <p className="text-gray-600">Subscribers: {channel?.subscribers?.length || 0}</p>
           </span>
           <p className="text-gray-600 max-w-xs sm:max-w-full">{channel?.description || "No description available."}</p>
-          <button className="mt-4 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition w-full sm:w-auto">
-            Subscribe
-          </button>
+         {
+            user.user.id === channel.owner._id ? (
+              <button className="mt-4 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition w-full sm:w-auto">
+                Edit Channel
+              </button>
+            ) : (
+              <button className="mt-4 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition w-full sm:w-auto">
+                Subscribe
+              </button>
+            )
+         }
         </div>
       </div>
       {/* Videos */}
@@ -49,7 +66,7 @@ export default function ChannelPage() {
         <h2 className="text-xl sm:text-2xl font-bold px-2 sm:px-4 mb-4">Videos</h2>
         {
           channelVideos.length > 0 ? (
-            <VideoGrid videos={channelVideos} />
+            <ChannelVideoGrid videos={channelVideos} singleColumn={false}/>
           ) : (
             <p className="text-center text-gray-600">No videos uploaded yet.</p>
           )
