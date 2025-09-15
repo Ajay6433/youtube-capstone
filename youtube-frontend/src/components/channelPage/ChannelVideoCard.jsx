@@ -1,8 +1,14 @@
+import { useContext, useState } from "react";
 import { Form } from "react-router-dom";
-import formatNumber from "../../utils/FormatNumber"
+import formatNumber from "../../utils/FormatNumber";
 import api from "../../api/api";
+import toast from "react-hot-toast";
+import { UserContext } from "../../context/UserContext"
+import EditVideoModal from "./EditVideoModal";
 
-export default function ChannelVideoCard({ video }) {
+export default function ChannelVideoCard({ video, onDelete }) {
+  let { user } = useContext(UserContext);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   async function channelPageDetails() {
     let channel = await api.get(`/channel/${video.channelId._id}`);
@@ -12,6 +18,32 @@ export default function ChannelVideoCard({ video }) {
     window.location.href = `/channel/${video.channelId._id}`;
   }
 
+  async function handleDelete() {
+    if (confirm("Are you sure you want to delete this video?")) {
+      try {
+        await api.delete(`/videos/${video._id}`,
+          {
+            headers: {
+              Authorization: `JWT ${user?.token}`,
+            },
+          }
+        );
+        toast.success("Video deleted successfully");
+        if (onDelete) {
+          onDelete(video._id);
+        } else {
+         setTimeout(() => { window.location.reload(); }, 1000);
+        }
+      } catch (error) {
+        console.error("Error deleting video:", error);
+        alert("Failed to delete video. Please try again.");
+      }
+    }
+  }
+
+  const isOwner = user && video.channelId && user.user.id === video.uploader._id;
+  // console.log("video.channelId:", video.channelId, user?.user?.id, video.channelId?._id);
+  // console.log("isOwner:", isOwner);
 
 
   return (
@@ -36,16 +68,43 @@ export default function ChannelVideoCard({ video }) {
         />
 
         {/* Text details */}
-        <div className="flex flex-col overflow-hidden">
+        <div className="flex flex-col overflow-hidden w-full">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-snug line-clamp-2">
             {video.title}
           </h3>
-          <p className="text-xs sm:text-sm text-gray-600"
+          <p
+            className="text-xs sm:text-sm text-gray-600 cursor-pointer"
             onClick={channelPageDetails}
-          >{video.channelName}</p>
+          >
+            {video.channelName}
+          </p>
           <p className="text-xs sm:text-sm text-gray-500">
             {formatNumber(video.views)} views · {formatNumber(video.likes)} likes
           </p>
+
+          {/* Show buttons only if owner */}
+          {isOwner && (
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={() => setShowEditModal(true)}
+                className="px-3 py-1 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleDelete}
+                className="px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+              >
+                Delete
+              </button>
+            </div>
+          )}
+          {showEditModal && (
+            <EditVideoModal
+              video={video}
+              setShowEditModal={setShowEditModal}
+            />
+          )}
         </div>
       </div>
     </div>
