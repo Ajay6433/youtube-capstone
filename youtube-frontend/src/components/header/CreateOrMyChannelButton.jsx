@@ -14,7 +14,6 @@ export default function CreateOrMyChannelButton({ user, setShowChannelModal }) {
   }, []);
 
   const handleButtonClick = () => {
-    console.log("Button clicked. Current channel:", channel);
     if (channel) {
       // ✅ Navigate to channel page
       navigate(`/channel/${channel._id}`);

@@ -27,13 +27,10 @@ export default function ChannelPage() {
     const parsedLocal = localChannel ? JSON.parse(localChannel) : null;
 
     if (parsedSession && parsedSession._id === id) {
-      console.log("Viewing channel from sessionStorage");
       setCurrentChannel(parsedSession);
     } else if (parsedLocal && parsedLocal._id === id) {
-      console.log("Viewing owner channel from localStorage");
       setCurrentChannel(parsedLocal);
     } else {
-      console.warn("No channel found for this id!");
       setCurrentChannel(null);
     }
   }, [id]);

@@ -1,5 +1,57 @@
 import Video from "../models/Video.model.js";
 
+
+export async function uploadVideo(req, res) {
+  try {
+
+    const {
+      title,
+      description,
+      category,
+      video,
+      channelName,
+      channelId,
+      uploader,
+      handle,
+      avatar,
+      views,
+      likes,
+      dislikes,
+    } = req.body;
+
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ message: "Thumbnail upload failed" });
+    }
+
+    const newVideo = new Video({
+      title,
+      description,
+      category,
+      video,
+      channelName,
+      channelId,
+      uploader,
+      handle,
+      avatar,
+      views: views || 0,
+      likes: likes || 0,
+      dislikes: dislikes || 0,
+      thumbnail: req.file.path, // coming from multer/cloudinary
+    });
+
+    await newVideo.save();
+
+    return res
+      .status(201)
+      .json({ message: "Video uploaded successfully", video: newVideo });
+  } catch (error) {
+    console.error("Error uploading video:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+}
+
 /**
  * @desc Get all videos (no pagination)
  * @route GET /api/videos

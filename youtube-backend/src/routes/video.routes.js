@@ -5,7 +5,8 @@ import {
   getVideosByChannel,
   getTrendingVideos,
   updateVideo,
-  deleteVideo
+  deleteVideo,
+  uploadVideo
 } from "../controllers/video.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 import uploadThumbnail from "../middlewares/uploadThumbnail.middleware.js";
@@ -14,6 +15,7 @@ import uploadThumbnail from "../middlewares/uploadThumbnail.middleware.js";
 const router = express.Router();
 
 // Public routes (for displaying videos)
+router.post("/upload", protect, uploadThumbnail.single("thumbnail"),uploadVideo); // POST upload video
 router.get("/", getAllVideos);                     // GET all videos
 router.get("/trending", getTrendingVideos);         // GET top trending videos
 router.get("/:id", getVideoById);                   // GET single video (auto increments views)
