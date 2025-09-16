@@ -59,14 +59,7 @@ const Navbar = memo(() => {
           <div className="hidden sm:flex justify-center w-full">
             <SearchBar />
           </div>
-          {/* channel create button */}
-          {/* {user && (
-            <button className="flex items-center gap-2 lg:ml-8 px-4 py-2 bg-gray-100 rounded-full hover:bg-gray-200 transition
-            " onClick={() => setShowChannelModal(!showChannelModal)}>
-              <span className="text-xl font-bold">+</span>
-              <span className="text-black font-medium">Create</span>
-            </button>
-          )} */}
+          
           <CreateOrMyChannelButton user={user} setShowChannelModal={setShowChannelModal} />
           {/* Mobile: show SearchToggle */}
           <div className="sm:hidden">
