@@ -12,7 +12,6 @@ export default function ChannelVideoCard({ video, onDelete }) {
 
   async function channelPageDetails() {
     let channel = await api.get(`/channel/${video.channelId._id}`);
-    console.log("Fetched channel data:", channel);
     channel = channel.data.channel;
     sessionStorage.setItem("channel", JSON.stringify(channel));
     window.location.href = `/channel/${video.channelId._id}`;
@@ -42,8 +41,6 @@ export default function ChannelVideoCard({ video, onDelete }) {
   }
 
   const isOwner = user && video.channelId && user.user.id === video.uploader._id;
-  // console.log("video.channelId:", video.channelId, user?.user?.id, video.channelId?._id);
-  // console.log("isOwner:", isOwner);
 
 
   return (

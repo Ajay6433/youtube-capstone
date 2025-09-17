@@ -4,11 +4,9 @@ import { UserContext } from "../context/UserContext";
 import api from "../api/api";
 
 export default function VideoCard({ video }) {
-  console.log("Rendering VideoCard for video:", video.channelId._id);
 
   async function channelPageDetails() {
     let channel = await api.get(`/channel/${video.channelId._id}`);
-    console.log("Fetched channel data:", channel);
     channel = channel.data.channel;
     sessionStorage.setItem("channel", JSON.stringify(channel));
     window.location.href = `/channel/${video.channelId._id}`;

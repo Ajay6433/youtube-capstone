@@ -8,7 +8,6 @@ export default function UploadVideoModal({ setShowUploadModal, channelId }) {
     ? JSON.parse(localStorage.getItem("user"))
     : null;
 
-    console.log(user.user)
   const [form, setForm] = useState({
     title: "",
     category: [], // ✅ changed to array
@@ -84,7 +83,6 @@ export default function UploadVideoModal({ setShowUploadModal, channelId }) {
         },
       });
 
-      console.log(res.data);
       toast.success(res.data.message || "Video uploaded successfully!");
 
       setForm({

@@ -38,7 +38,6 @@ export default function Signup() {
       });
 
       toast.success("Signup successful!");
-      console.log("Signup successful:", res.data);
 
       // Optional: redirect after signup
       setTimeout(() => {

@@ -32,7 +32,6 @@ const Comments = (videoId) => {
     const handleAdd = async (e) => {
         e.preventDefault();
         if (!input.trim()) return;
-        console.log(input);
         try {
             const token = parsedUser?.token; // or localStorage.getItem("token")
             const res = await api.post(
@@ -112,8 +111,6 @@ const Comments = (videoId) => {
         setIsEditOpen(true);
     };
 
-    // console.log(comments);
-    // console.log(parsedUser);
 
     return (
         <div>

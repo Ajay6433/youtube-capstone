@@ -48,30 +48,33 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="h-[calc(100vh-4rem)] overflow-y-auto">
                     {/* Sidebar content */}
                     {
-                        mainMenu.map((menu) => {
-                            return (<nav className="p-4 space-y-4">
-                                <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
-                            </nav>
+                        mainMenu.map((menu, idx) => {
+                            return (
+                                <nav className="p-4 space-y-4" key={menu.name || idx}>
+                                    <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
+                                </nav>
                             )
                         })
                     }
                     <div className="border-t my-2"></div>
                     <div className="text-lg text-reguler px-4">You</div>
                     {
-                        youMenu.map((menu) => {
-                            return (<nav className="p-4 space-y-4">
-                                <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
-                            </nav>
+                        youMenu.map((menu, idx) => {
+                            return (
+                                <nav className="p-4 space-y-4" key={menu.name || idx}>
+                                    <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
+                                </nav>
                             )
                         })
                     }
                     <div className="border-t my-2"></div>
                     <div className="text-xs text-gray-500 px-4">Explore</div>
                         {
-                            exploreMenu.map((menu) => {
-                                return (<nav className="p-4 space-y-4">
-                                    <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
-                                </nav>
+                            exploreMenu.map((menu, idx) => {
+                                return (
+                                    <nav className="p-4 space-y-4" key={menu.name || idx}>
+                                        <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
+                                    </nav>
                                 )
                             })
                         }

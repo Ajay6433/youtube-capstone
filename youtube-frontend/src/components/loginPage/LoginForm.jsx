@@ -31,7 +31,6 @@ export default function Login() {
         localStorage.setItem("channel", JSON.stringify(channel));
       } catch (channelError) {
         if (channelError.response?.status === 404) {
-          console.log("No channel found for this user. This is fine.");
           localStorage.removeItem("channel"); // clear stale channel if any
         } else {
           console.error("Error fetching channel:", channelError);

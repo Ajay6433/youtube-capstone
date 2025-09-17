@@ -30,7 +30,6 @@ const GoogleLoginButton = () => {
         id_token: response.credential,
       });
 
-      console.log("Login success:", res.data);
       // Save user data in context
       login(res.data.user);
       // Redirect to home page

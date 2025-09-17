@@ -62,7 +62,6 @@ export default function ChannelModal({ setShowChannelModal }) {
         },
       });
 
-      console.log(res.data);
       localStorage.setItem("channel", JSON.stringify(res.data));
       // localStorage.setItem("", JSON.stringify(res.data));
       toast.success(res.data.message || "Channel created successfully!");

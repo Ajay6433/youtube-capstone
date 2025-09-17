@@ -7,7 +7,6 @@ export default function ChannelPage() {
   const { videos } = useVideos();
   const { user } = useContext(UserContext);
 
-  console.log("user context:", user);
   // Get current channel being viewed
   let channel = sessionStorage.getItem("channel");
   channel = channel ? JSON.parse(channel) : null;
@@ -16,7 +15,7 @@ export default function ChannelPage() {
   let ownerChannel = localStorage.getItem("ownerChannel");
   ownerChannel = ownerChannel ? JSON.parse(ownerChannel) : null;
 
-  if (!channel) {
+  if (!channel ) {
     window.location.href =
      "/";
   }
@@ -26,10 +25,6 @@ export default function ChannelPage() {
     user?.user?.id && channel?.owner?._id
       ? String(user.user.id) === String(channel.owner?._id)
       : false;
-
-      console.log("Is user the channel owner?", isOwner);
-      console.log("Current channel data:", channel);
-      console.log("Owner channel data:", ownerChannel);
 
 
 
@@ -69,7 +64,7 @@ export default function ChannelPage() {
           </h1>
           <span className="text-sm text-gray-500 flex flex-col sm:flex-row items-center sm:items-center my-2 gap-1 sm:gap-2">
             <p className="text-gray-600">
-              @{channel?.owner.username || "Unknown Owner"}
+              @{channel?.owner.name || "Unknown Owner"}
             </p>
             <p className="hidden sm:block text-gray-600 mx-1">•</p>
             <p className="text-gray-600">
