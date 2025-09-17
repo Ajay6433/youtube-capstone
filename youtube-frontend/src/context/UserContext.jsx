@@ -10,10 +10,6 @@ export default function UserProvider({ children }) {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-
-    const name = parsedUser?.user?.name || parsedUser?.name || null;
-
-    toast.success(`Welcome back, ${name}`);
     setUser(parsedUser);
   }, []);
 

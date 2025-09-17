@@ -87,13 +87,13 @@ export default function ChannelVideoCard({ video, onDelete }) {
             <div className="flex gap-2 mt-2">
               <button
                 onClick={() => setShowEditModal(true)}
-                className="px-3 py-1 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                className="px-2 py-0.5 text-xs border border-blue-400 text-blue-600 bg-white rounded hover:bg-blue-50 transition"
               >
                 Edit
               </button>
               <button
                 onClick={handleDelete}
-                className="px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                className="px-2 py-0.5 text-xs border border-red-400 text-red-600 bg-white rounded hover:bg-red-50 transition"
               >
                 Delete
               </button>

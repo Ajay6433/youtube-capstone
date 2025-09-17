@@ -26,17 +26,15 @@ export default function CreateOrMyChannelButton({ user, setShowChannelModal }) {
   return (
     user && (
       <button
-        className="flex items-center gap-2 lg:ml-8 px-4 py-2 bg-gray-100 rounded-full hover:bg-gray-200 transition"
+        className="flex items-center gap-1 lg:ml-8 px-3 py-1 bg-white border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition"
         onClick={handleButtonClick}
       >
         {channel ? (
-          <>
-            <span className="text-black text-xs">My Channel</span>
-          </>
+          <span className="text-xs font-medium">My Channel</span>
         ) : (
           <>
-            <span className="text-xl font-bold">+</span>
-            <span className="text-black font-medium">Create</span>
+            <span className="text-lg font-bold">+</span>
+            <span className="text-sm font-medium">Create</span>
           </>
         )}
       </button>

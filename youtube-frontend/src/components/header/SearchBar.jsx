@@ -34,10 +34,12 @@ const SearchBar = ({ className = "", autoFocusOnMount = false, forceShow = false
       <form
         onSubmit={handleSeachQuerySubmit}
         className={`
-          flex 
-          border-1 border-base-content/20 
-          rounded-full w-full sm:w-sm md:w-md lg:w-lg xl:w-xl
-          overflow-hidden 
+          flex
+          border-1 border-base-content/20
+          rounded-full
+          w-full sm:w-sm md:w-md lg:w-lg xl:w-xl
+          mx-auto
+          overflow-hidden
           bg-base-200/40 relative
           ${!forceShow ? "absolute sm:static top-12 sm:top-0 left-0 z-[52] sm:z-auto" : ""}
           p-0

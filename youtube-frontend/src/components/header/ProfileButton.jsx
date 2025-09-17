@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 const ProfileButton = ({ onClick }) => {
-  const storedUser = localStorage.getItem("user");
-  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+  const {user} = useContext(UserContext);
 
   // Normalize user fields (handles both normal login and Google login)
   const avatar =
-    parsedUser?.user?.avatar || parsedUser?.avatar ||
+    user?.user?.avatar || user?.avatar ||
     "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
 
-  const name = parsedUser?.user?.name || parsedUser?.name || null;
+  const name = user?.user?.name || user?.name || null;
 
   return (
     <button
@@ -21,7 +21,7 @@ const ProfileButton = ({ onClick }) => {
         alt="Profile"
         className="h-8 w-8 rounded-full object-cover"
       />
-      <p>{name ? `Hi ${name}` : "Welcome"}</p>
+  <p className="hidden sm:block">{name ? `Hi ${name}` : "Welcome"}</p>
     </button>
   );
 };
