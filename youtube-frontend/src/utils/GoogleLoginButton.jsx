@@ -13,7 +13,7 @@ const GoogleLoginButton = () => {
   useEffect(() => {
     /* global google */
     google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID, // from GCP
+      client_id: GOOGLE_CLIENT_ID, 
       callback: handleGoogleResponse,
     });
 

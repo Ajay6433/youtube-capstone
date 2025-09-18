@@ -1,6 +1,6 @@
-
 const BurgerMenu = ({ onClick }) => {
   return (
+    // Button to toggle the drawer
     <button
       onClick={onClick}
       className="btn btn-circle mr-2 drawer-button p-2 cursor-pointer"

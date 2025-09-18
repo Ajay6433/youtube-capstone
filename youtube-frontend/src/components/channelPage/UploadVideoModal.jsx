@@ -1,16 +1,17 @@
 import { useState } from "react";
 import api from "../../api/api";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
 
 export default function UploadVideoModal({ setShowUploadModal, channelId }) {
+  // Get user data from local storage
   const user = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null;
 
+  // State to hold form data
   const [form, setForm] = useState({
     title: "",
-    category: [], // ✅ changed to array
+    category: [],
     thumbnail: "",
     description: "",
     video: "",
@@ -22,25 +23,26 @@ export default function UploadVideoModal({ setShowUploadModal, channelId }) {
     views: 0,
     likes: 0,
     dislikes: 0,
-    thumbnailFile: null, // local file reference
+    thumbnailFile: null,
     thumbnailPreview: null,
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Close modal
   const handleClose = () => setShowUploadModal(false);
-
+  //  Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-
+  // Handle category input changes
   const handleCategoryChange = (e) => {
     const value = e.target.value.split(",").map((c) => c.trim());
     setForm((prev) => ({ ...prev, category: value }));
   };
-
+  // Handle thumbnail file selection
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -51,12 +53,13 @@ export default function UploadVideoModal({ setShowUploadModal, channelId }) {
       }));
     }
   };
-
+// Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
+    // Prepare form data for video upload
     try {
       const formData = new FormData();
       formData.append("title", form.title);
@@ -75,16 +78,17 @@ export default function UploadVideoModal({ setShowUploadModal, channelId }) {
       });
       if (form.thumbnailFile) formData.append("thumbnail", form.thumbnailFile);
       else if (form.thumbnail) formData.append("thumbnail", form.thumbnail);
-
+      
+      // Send POST request to upload video
       const res = await api.post("/videos/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `JWT ${user?.token}`,
         },
       });
-
+      // On success
       toast.success(res.data.message || "Video uploaded successfully!");
-
+      // Reset form
       setForm({
         title: "",
         category: [],

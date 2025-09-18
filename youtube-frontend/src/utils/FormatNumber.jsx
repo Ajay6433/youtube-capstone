@@ -1,3 +1,4 @@
+// Utility to format numbers like 1500 to 1.5K, 2000000 to 2M, etc.
 function formatNumber(num) {
   if (num >= 1000000) {
     return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
@@ -10,6 +11,7 @@ function formatNumber(num) {
 
 export default formatNumber;
 
+// Utility to format date to "X days ago" format
 export function formatDaysAgo(dateString) {
   const date = new Date(dateString);
   const now = new Date();

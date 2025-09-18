@@ -3,13 +3,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { TbShare3 } from "react-icons/tb";
-
 import SuggestedVideos from "../components/videoPlayer/SuggestedVideos";
 import { useVideos } from "../context/VideoContext";
 import Comments from "../components/videoPlayer/Comments";
 import api from "../api/api";
-
-
 
 export default function VideoPlayer() {
   const { id } = useParams();
@@ -17,6 +14,7 @@ export default function VideoPlayer() {
   const [loading, setLoading] = useState(true);
   const { videos } = useVideos();
 
+  // Find the video by ID whenever `id` or `videos` change
   useEffect(() => {
     if (videos.length > 0) {
       const currentVideo = videos.find((v) => v._id === id);
@@ -25,16 +23,20 @@ export default function VideoPlayer() {
     }
   }, [id, videos]);
 
+  // Filter out the current video from suggestions
   const filteredVideos = videos.filter(v => v._id !== id);
 
+  // Show loading or video details
   if (loading) {
     return <p className="text-center mt-10">Loading video...</p>;
   }
 
+  // Redirect to home if no video is found
   if (!video) {
     return <p className="text-center mt-10">Video not found.</p>;
   }
 
+  // Handle channel page details 
   async function channelPageDetails() {
     let channel = await api.get(`/channel/${video.channelId._id}`);
     channel = channel.data.channel;

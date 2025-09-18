@@ -3,6 +3,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Signup() {
+  // State to hold form data
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -10,6 +11,7 @@ export default function Signup() {
     avatar: null, // file object
   });
 
+  // Handle form changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
@@ -20,6 +22,7 @@ export default function Signup() {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,16 +33,16 @@ export default function Signup() {
     if (formData.avatar) {
       formDataToSend.append("avatar", formData.avatar);
     }
-
+    // Send the form data to the server
     try {
       const res = await api.post("/auth/register", formDataToSend, {
+        //Using cloudinary for image upload so setting content-type to multipart/form-data
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
 
       toast.success("Signup successful!");
-
-      // Optional: redirect after signup
+      //Redirecting to login page after 1 second
       setTimeout(() => {
         window.location.href = "/login";
       }, 1000);
@@ -50,8 +53,9 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen mt-6 bg-gray-100">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        {/* Signup form */}
         <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
           Create Your Account
         </h2>
@@ -110,7 +114,7 @@ export default function Signup() {
             Sign Up
           </button>
         </form>
-
+        {/* Link to login page */}
         <p className="text-sm text-gray-600 text-center mt-6">
           Already have an account?{" "}
           <a href="/login" className="text-red-600 hover:underline">

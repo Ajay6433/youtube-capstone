@@ -3,7 +3,6 @@ import BurgerMenu from "./BurgerMenu";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import ProfileButton from "./ProfileButton";
-import UserContext from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import SearchToggle from "./SearchToggle";
@@ -13,6 +12,8 @@ import ChannelModal from "./ChannelModal";
 import CreateOrMyChannelButton from "./CreateOrMyChannelButton";
 
 const Navbar = memo(() => {
+  // State variables
+  // Control visibility of search bar, sidebar, profile modal, channel modal
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -39,6 +40,7 @@ const Navbar = memo(() => {
 
   return (
     <>
+      {/* Header */}
       <header
         className="
           fixed top-0 left-0 right-0 
@@ -59,7 +61,7 @@ const Navbar = memo(() => {
           <div className="hidden sm:flex justify-center w-full">
             <SearchBar />
           </div>
-          
+
           <CreateOrMyChannelButton user={user} setShowChannelModal={setShowChannelModal} />
           {/* Mobile: show SearchToggle */}
           <div className="sm:hidden">
@@ -104,7 +106,7 @@ const Navbar = memo(() => {
             </div>
           </div>
         )}
-       
+
       </header>
       {/* Search Modal for mobile */}
       {showSearchBar && (

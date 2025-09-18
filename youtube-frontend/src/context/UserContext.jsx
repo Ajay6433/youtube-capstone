@@ -13,22 +13,23 @@ export default function UserProvider({ children }) {
     setUser(parsedUser);
   }, []);
 
-const login = (userData) => {
-  localStorage.setItem("user", JSON.stringify(userData));
-  setUser(userData);
-};
+  // login function
+  const login = (userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+  };
+  // Logout function
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    toast.success("Logout successful!");
+    // Redirect to login page after logout
+    window.location.href = "/login";
+  };
 
-const logout = () => {
-  localStorage.removeItem("user");
-  setUser(null);
-  toast.success("Logout successful!");
-  // Redirect to login page after logout
-  window.location.href = "/login";
-};
-
-return (
-  <UserContext.Provider value={{ user, login, logout }}>
-    {children}
-  </UserContext.Provider>
-);
+  return (
+    <UserContext.Provider value={{ user, login, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
 }

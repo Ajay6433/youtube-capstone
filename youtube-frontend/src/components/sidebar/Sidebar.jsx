@@ -4,6 +4,7 @@ import { mainMenu, youMenu, exploreMenu, miscellaneousMenu } from "./SidebarMenu
 
 
 const Sidebar = ({ isOpen, onClose }) => {
+    // Prevent body scroll when sidebar is open
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
@@ -19,7 +20,6 @@ const Sidebar = ({ isOpen, onClose }) => {
             className={`fixed inset-0 z-50 transition-opacity ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                 }`}
         >
-
             {/* Sidebar drawer */}
             <div
                 className={`absolute top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
@@ -48,6 +48,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="h-[calc(100vh-4rem)] overflow-y-auto">
                     {/* Sidebar content */}
                     {
+                        // Main menu items
                         mainMenu.map((menu, idx) => {
                             return (
                                 <nav className="p-4 space-y-4" key={menu.name || idx}>
@@ -59,6 +60,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <div className="border-t my-2"></div>
                     <div className="text-lg text-reguler px-4">You</div>
                     {
+                        // You menu items
                         youMenu.map((menu, idx) => {
                             return (
                                 <nav className="p-4 space-y-4" key={menu.name || idx}>
@@ -69,17 +71,18 @@ const Sidebar = ({ isOpen, onClose }) => {
                     }
                     <div className="border-t my-2"></div>
                     <div className="text-xs text-gray-500 px-4">Explore</div>
-                        {
-                            exploreMenu.map((menu, idx) => {
-                                return (
-                                    <nav className="p-4 space-y-4" key={menu.name || idx}>
-                                        <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
-                                    </nav>
-                                )
-                            })
-                        }
-                    </div>     
-                          
+                    {
+                        // Explore menu items
+                        exploreMenu.map((menu, idx) => {
+                            return (
+                                <nav className="p-4 space-y-4" key={menu.name || idx}>
+                                    <p className="flex items-center space-x-4">{menu.svg} <span className="font-semibold text-base">{menu.name}</span></p>
+                                </nav>
+                            )
+                        })
+                    }
+                </div>
+
             </div>
         </div>
     );

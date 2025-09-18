@@ -10,6 +10,7 @@ export default function ChannelVideoCard({ video, onDelete }) {
   let { user } = useContext(UserContext);
   const [showEditModal, setShowEditModal] = useState(false);
 
+  // Handle channel page details
   async function channelPageDetails() {
     let channel = await api.get(`/channel/${video.channelId._id}`);
     channel = channel.data.channel;
@@ -17,6 +18,7 @@ export default function ChannelVideoCard({ video, onDelete }) {
     window.location.href = `/channel/${video.channelId._id}`;
   }
 
+  // Handle video deletion
   async function handleDelete() {
     if (confirm("Are you sure you want to delete this video?")) {
       try {
@@ -40,6 +42,7 @@ export default function ChannelVideoCard({ video, onDelete }) {
     }
   }
 
+  // Check if the logged-in user is the owner of the video
   const isOwner = user && video.channelId && user.user.id === video.uploader._id;
 
 

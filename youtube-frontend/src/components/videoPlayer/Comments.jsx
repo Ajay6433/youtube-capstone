@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 
 
 const Comments = (videoId) => {
+    // Accessing user data from local storage || can be fetched from userContext as well
     const user = localStorage.getItem("user");
     const [activeComment, setActiveComment] = useState(null); // for tracking which comment's menu is open
     const parsedUser = user ? JSON.parse(user) : null;
@@ -13,27 +14,26 @@ const Comments = (videoId) => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [editingComment, setEditingComment] = useState(null);
     const [editText, setEditText] = useState("");
+    // Load comments when videoId changes
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const res = await api.get(`/comments/${videoId.videoId}`);
+                setComments(res.data.comments);
+            } catch (err) {
+                console.error("Failed to load comments.");
+            }
+        };
 
-   useEffect(() => {
-  const fetchComments = async () => {
-    try {
-      const res = await api.get(`/comments/${videoId.videoId}`);
-      setComments(res.data.comments);
-    } catch (err) {
-      console.error("Failed to load comments.");
-    }
-  };
-
-  if (videoId) fetchComments();
-}, [videoId]); // ✅ remove comments from dependency array
-
+        if (videoId) fetchComments();
+    }, [videoId]); 
 
     // Add comment
     const handleAdd = async (e) => {
         e.preventDefault();
         if (!input.trim()) return;
         try {
-            const token = parsedUser?.token; // or localStorage.getItem("token")
+            const token = parsedUser?.token;
             const res = await api.post(
                 `/comments/${videoId.videoId}`,
                 { text: input.trim() },
@@ -105,6 +105,7 @@ const Comments = (videoId) => {
         }
     };
 
+    // Open edit modal for a comment
     const openEditModal = (comment) => {
         setEditingComment(comment);
         setEditText(comment.text);
@@ -121,6 +122,7 @@ const Comments = (videoId) => {
                     <span>Sort by</span>
                 </div>
             </div>
+            {/* Add comment form */}
             {parsedUser && (
                 <form onSubmit={handleAdd} className="flex items-center gap-2 mb-6">
                     <img src={parsedUser.user.avatar || "/default-avatar.png"} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
@@ -179,6 +181,7 @@ const Comments = (videoId) => {
 
 
             <div className="space-y-6">
+                {/* Comments of the video */}
                 {comments.map((comment) => (
                     <div key={comment._id} className="flex items-start gap-4 group relative">
                         <img src={comment.user.avatar || "/default-avatar.png"} alt={comment.user?.name || comment.user?.username || "User"} className="w-10 h-10 rounded-full object-cover" />
@@ -203,7 +206,7 @@ const Comments = (videoId) => {
                                 </button>
                                 <button className="hover:underline">Reply</button>
                                 <div className="relative ml-auto">
-                                    {/* 3-dot button - always visible */}
+                                    {/* Dropdown button */}
                                     <button
                                         onClick={() =>
                                             setActiveComment(activeComment === comment._id ? null : comment._id)
@@ -226,7 +229,7 @@ const Comments = (videoId) => {
                                         <div className="absolute right-0 mt-2 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                                             <button
                                                 onClick={() => {
-                                                    openEditModal(comment); // or open inline edit mode
+                                                    openEditModal(comment);
                                                     setActiveComment(null);
                                                 }}
                                                 className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
@@ -246,15 +249,11 @@ const Comments = (videoId) => {
                                         </div>
                                     )}
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
-
-
         </div>
     );
 }

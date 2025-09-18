@@ -30,6 +30,7 @@ const SearchBar = ({ className = "", autoFocusOnMount = false, forceShow = false
 
  return (
   <div className={`${className} relative`}>
+    {/* Responsive search bar */}
     {(window.innerWidth >= 640 || forceShow) && (
       <form
         onSubmit={handleSeachQuerySubmit}
@@ -73,6 +74,7 @@ const SearchBar = ({ className = "", autoFocusOnMount = false, forceShow = false
             />
           </svg>
         </button>
+        {/* Clear input button */}
         {inputValue && (
           <button
             onClick={handleClearInput}

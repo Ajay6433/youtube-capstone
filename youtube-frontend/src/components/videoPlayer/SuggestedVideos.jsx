@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { formatDaysAgo } from "../../utils/FormatNumber";
 
 export default function SuggestedVideos({ videos }) {
+	// Check if videos are available before rendering
 	if (!videos || videos.length === 0) {
 		return <p className="text-center mt-10">No videos available</p>;
 	}
 
 	return (
 		<div className="w-full grid grid-cols-1 md:grid-cols-2 lg:flex flex-col gap-4 lg:gap-0 lg:pr-6 lg:pt-6 lg:mb-2">
+			{/* Loop through videos and render each one */}
 			{videos.map((video) => (
 				<Link
 					to={`/videos/${video._id}`}

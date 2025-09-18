@@ -2,13 +2,14 @@ import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 
 const ProfileButton = ({ onClick }) => {
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   // Normalize user fields (handles both normal login and Google login)
   const avatar =
     user?.user?.avatar || user?.avatar ||
     "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
 
+  // Get user's name (handles both normal login and Google login)
   const name = user?.user?.name || user?.name || null;
 
   return (
@@ -21,7 +22,7 @@ const ProfileButton = ({ onClick }) => {
         alt="Profile"
         className="h-8 w-8 rounded-full object-cover"
       />
-  <p className="hidden sm:block">{name ? `Hi ${name}` : "Welcome"}</p>
+      <p className="hidden sm:block">{name ? `Hi ${name}` : "Welcome"}</p>
     </button>
   );
 };

@@ -12,18 +12,19 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
     setLoading(true);
     try {
       const res = await api.post("/auth/login", formData, { withCredentials: true });
-      // ✅ Try fetching channel but handle 404 gracefully
+      // Fetch and store channel info if available
       let channel = null;
       try {
         const channelRes = await api.get(`/channel/owner/${res.data.user.id}`);
@@ -36,8 +37,12 @@ export default function Login() {
           console.error("Error fetching channel:", channelError);
         }
       }
+      // Store user data in local storage
+      localStorage.setItem("user", JSON.stringify(res.data));
       toast.success("Login successful!");
+      // send user data to context
       login(res.data);
+      // Redirect to home page
       window.location.href = "/";
     } catch (error) {
       const msg = error.response?.data?.message || "Login failed!";
@@ -50,6 +55,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center ">
+      {/* Login form */}
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, y: 30 }}

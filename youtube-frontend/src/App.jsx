@@ -8,14 +8,17 @@ import ChannelPage from "./pages/ChannelPage";
 export default function App() {
   return (
     <Router>
+      {/* Routes for different pages */}
       <Routes>
+        {/* Main layout for all pages */}
         <Route path="/" element={<MainLayout />}>
+        {/* Routes for specific pages Home, VideoPlayer, ChannelPage, LoginPage, SignupPage */}
           <Route index element={<Home />} />
           <Route path="videos/:id" element={<VideoPlayer />} />
           <Route path="channel/:id" element={<ChannelPage />} />
           <Route path="login" element={<LoginPage />} />
-        </Route>
           <Route path="signup" element={<Signup />} />
+        </Route>
       </Routes>
     </Router>
   );

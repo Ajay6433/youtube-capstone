@@ -1,9 +1,11 @@
 const SearchToggle = ({ setShowSearchBar }) => {
   return (
     <button
+    // Show search toggle button on mobile only
       onClick={() => setShowSearchBar(true)}
       className="btn btn-circle ml-4 sm:hidden"
     >
+      {/* Search icon */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"

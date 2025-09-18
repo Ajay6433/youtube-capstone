@@ -1,18 +1,15 @@
-import { Form } from "react-router-dom";
 import formatNumber from "../utils/FormatNumber";
-import { UserContext } from "../context/UserContext";
 import api from "../api/api";
 
 export default function VideoCard({ video }) {
 
+  // Handle channel page details
   async function channelPageDetails() {
     let channel = await api.get(`/channel/${video.channelId._id}`);
     channel = channel.data.channel;
     sessionStorage.setItem("channel", JSON.stringify(channel));
     window.location.href = `/channel/${video.channelId._id}`;
   }
-
-
 
   return (
     <div className="w-full max-w-xs sm:max-w-sm cursor-pointer mx-auto">

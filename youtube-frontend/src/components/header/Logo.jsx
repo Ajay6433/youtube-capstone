@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 const Logo = memo(() => {
   return (
+    // Logo linking to home page
     <Link to="/" className="p-4">
       <svg
         xmlns="http://www.w3.org/2000/svg"

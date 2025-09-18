@@ -1,20 +1,23 @@
-// context/VideoContext.jsx
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import api from "../api/api";
 
 const VideoContext = createContext();
 
 export function VideoProvider({ children }) {
+  // State to hold all videos 
   const [videos, setVideos] = useState([]);
-  const [filteredVideos, setFilteredVideos] = useState([]); // ✅ New
+  // State for filtered videos 
+  const [filteredVideos, setFilteredVideos] = useState([]);
+  // Loading state
   const [loading, setLoading] = useState(true);
 
+  // Fetch videos from backend
   const fetchVideos = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get("/videos");
       setVideos(res.data.videos);
-      setFilteredVideos(res.data.videos); // ✅ By default, show all
+      setFilteredVideos(res.data.videos); // By default, shows all
     } catch (error) {
       console.error("Error fetching videos:", error.response?.data || error.message);
     } finally {
@@ -22,6 +25,7 @@ export function VideoProvider({ children }) {
     }
   }, []);
 
+  // Fetch videos on mount 
   useEffect(() => {
     fetchVideos();
   }, [fetchVideos]);
@@ -30,8 +34,8 @@ export function VideoProvider({ children }) {
     <VideoContext.Provider
       value={{
         videos,
-        filteredVideos, // ✅ now available
-        setFilteredVideos, // ✅ allows SearchBar to update filtered results
+        filteredVideos, 
+        setFilteredVideos,
         loading,
         refetch: fetchVideos,
       }}

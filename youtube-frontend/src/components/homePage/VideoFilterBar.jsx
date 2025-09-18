@@ -5,8 +5,9 @@ export default function VideoFilterBar() {
   const { videos, setFilteredVideos } = useVideos();
   const [activeFilter, setActiveFilter] = useState("All");
 
-  // ✅ Dynamically generate filters based on video categories
+  // Dynamically generate filters based on video categories
   const FILTERS = useMemo(() => {
+    // Use a Set to avoid duplicate categories
     const uniqueCategories = new Set();
     videos.forEach((video) => {
       if (Array.isArray(video.category)) {
@@ -16,6 +17,7 @@ export default function VideoFilterBar() {
     return ["All", ...Array.from(uniqueCategories)];
   }, [videos]);
 
+  // Handle filter button click
   function handleFilterClick(filter) {
     setActiveFilter(filter);
 
@@ -33,6 +35,7 @@ export default function VideoFilterBar() {
 
   return (
     <div className="flex overflow-x-auto space-x-3 mb-4 no-scrollbar">
+      {/* Filter buttons */}
       {FILTERS.map((filter) => (
         <button
           key={filter}

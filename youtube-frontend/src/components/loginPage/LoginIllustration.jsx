@@ -1,6 +1,4 @@
-import React from "react";
 import { motion } from "framer-motion";
-// Import the illustration image
 import loginIllustration from "../../assets/login-illustration.png";
 
 const LoginIllustration = () => {
@@ -11,6 +9,7 @@ const LoginIllustration = () => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
+      {/* Login illustration image */}
       <img
         src={loginIllustration}
         alt="Login Illustration"

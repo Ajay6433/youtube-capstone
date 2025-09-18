@@ -3,10 +3,12 @@ import api from "../../api/api";
 import toast from "react-hot-toast";
 
 export default function EditVideoModal({ setShowEditModal, video }) {
+  // Get user data from local storage
   const user = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null;
 
+  // State to hold form data
   const [form, setForm] = useState({
     title: "",
     category: [],
@@ -35,34 +37,41 @@ export default function EditVideoModal({ setShowEditModal, video }) {
     }
   }, [video]);
 
+  // Close modal
   const handleClose = () => setShowEditModal(false);
 
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle category input changes
   const handleCategoryChange = (e) => {
     const value = e.target.value.split(",").map((c) => c.trim());
     setForm((prev) => ({ ...prev, category: value }));
   };
 
+  // Handle thumbnail file selection
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setForm((prev) => ({
         ...prev,
         thumbnailFile: file,
+        // Create a preview URL for the selected thumbnail
         thumbnailPreview: URL.createObjectURL(file),
       }));
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
+    // Prepare form data for video update
     try {
       const formData = new FormData();
       formData.append("title", form.title);
@@ -78,9 +87,11 @@ export default function EditVideoModal({ setShowEditModal, video }) {
         formData.append("thumbnail", form.thumbnail);
       }
 
+      // Send PUT request to update video
       const res = await api.put(`/videos/${video._id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          // Send JWT token for authentication
           Authorization: `JWT ${user?.token}`,
         },
       });

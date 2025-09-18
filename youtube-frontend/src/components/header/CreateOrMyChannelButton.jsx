@@ -5,7 +5,7 @@ export default function CreateOrMyChannelButton({ user, setShowChannelModal }) {
   const navigate = useNavigate();
   const [channel, setChannel] = useState(null);
 
-  // ✅ Load channel from localStorage on mount
+  // Load channel from localStorage on mount
   useEffect(() => {
     const storedChannel = localStorage.getItem("channel");
     if (storedChannel) {
@@ -15,15 +15,16 @@ export default function CreateOrMyChannelButton({ user, setShowChannelModal }) {
 
   const handleButtonClick = () => {
     if (channel) {
-      // ✅ Navigate to channel page
+      // Navigate to channel page
       navigate(`/channel/${channel._id}`);
     } else {
-      // ✅ Open modal to create channel
+      // Open modal to create channel
       setShowChannelModal(true);
     }
   };
 
   return (
+    // Show button only if user is logged in
     user && (
       <button
         className="flex items-center gap-1 lg:ml-8 px-3 py-1 bg-white border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition"

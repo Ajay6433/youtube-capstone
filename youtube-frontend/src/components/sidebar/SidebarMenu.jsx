@@ -1,7 +1,4 @@
-// all the code in this file is related to the sidebar menu of a YouTube clone application.
-// It includes the main menu, explore menu, miscellaneous menu, and user-specific menu items.
-// Each menu item has a name and an SVG icon for display purposes.
-
+// Sidebar menu data
 export const mainMenu = [
   {
     name: "Home",
