@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: ./youtube-backend
+    container_name: youtube-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./youtube-backend:/app
+      - /app/node_modules
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - PORT=8080
+
+  frontend:
+    build: ./youtube-frontend
+    container_name: youtube-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./youtube-frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - backend
