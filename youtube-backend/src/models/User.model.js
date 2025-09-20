@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-// Simple user schema for YouTube clone
 const userSchema = new mongoose.Schema({
     // Basic user info
     username: {

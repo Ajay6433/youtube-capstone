@@ -3,6 +3,8 @@
 // import Video from ".//src/models/Video.model.js";
 // import videoData from "./DummyVideos.js"; // dummy data
 
+// This file is made for seeding the videos to the backend for the development purpose
+
 // dotenv.config();
 
 // async function insertVideos() {

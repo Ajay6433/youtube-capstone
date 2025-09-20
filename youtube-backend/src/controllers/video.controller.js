@@ -1,6 +1,7 @@
 import Video from "../models/Video.model.js";
 
-
+// Upload a video
+// POST /api/videos
 export async function uploadVideo(req, res) {
   try {
 
@@ -52,14 +53,12 @@ export async function uploadVideo(req, res) {
   }
 }
 
-/**
- * @desc Get all videos (no pagination)
- * @route GET /api/videos
- * @access Public
- */
+
+// Get all videos (no pagination)
+// GET /api/videos
 export async function getAllVideos(req, res) {
   try {
-    const { search, category } = req.query;
+    const { search, category } = req.query; //Right now handling this search from the frontend only can be modified to the backend as well
 
     // Build query dynamically
     const query = {};
@@ -70,23 +69,23 @@ export async function getAllVideos(req, res) {
       query.category = { $in: [category] };
     }
 
+    // Fetch videos 
     const videos = await Video.find(query)
       .sort({ createdAt: -1 })
-      .populate("channelId", "channelName channelBanner")  // if channel ref exists
+      .populate("channelId", "channelName channelBanner")
       .populate("uploader", "name avatar");
 
+    // Success response
     return res.status(200).json({ count: videos.length, videos });
   } catch (error) {
+    // Handle errors
     console.error("Error fetching videos:", error);
     return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 }
 
-/**
- * @desc Get single video and increment views
- * @route GET /api/videos/:id
- * @access Public
- */
+// Get single video and increment views
+// GET /api/videos/:id
 export async function getVideoById(req, res) {
   try {
     const video = await Video.findById(req.params.id)
@@ -108,14 +107,12 @@ export async function getVideoById(req, res) {
   }
 }
 
-/**
- * @desc Get videos by channel with pagination
- * @route GET /api/videos/channel/:channelId?page=1
- * @access Public
- */
+// Get videos by channel with pagination
+// GET /api/videos/channel/:channelId
 export async function getVideosByChannel(req, res) {
   try {
     const { channelId } = req.params;
+    // Pagination 
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const skip = (page - 1) * limit;
@@ -125,7 +122,7 @@ export async function getVideosByChannel(req, res) {
       .skip(skip)
       .limit(limit)
       .populate("uploader", "name avatar");
-
+    // Total videos
     const total = await Video.countDocuments({ channelId });
 
     return res.status(200).json({
@@ -139,13 +136,12 @@ export async function getVideosByChannel(req, res) {
   }
 }
 
-/**
- * @desc Get trending videos (top by views)
- * @route GET /api/videos/trending
- * @access Public
- */
+// Get trending videos (top by views)
+// GET /api/videos/trending
+
 export async function getTrendingVideos(req, res) {
   try {
+    // Controller for get the videos based on the high number of views calling them trending, Not implemented in the frontend
     const videos = await Video.find()
       .sort({ views: -1 })
       .limit(10)
@@ -159,64 +155,65 @@ export async function getTrendingVideos(req, res) {
   }
 }
 
-
+// Update a video
+// PUT /api/videos/:id
 export async function updateVideo(req, res) {
-    try {
-      const { id } = req.params;
-      const { title, description, category } = req.body;
-  
-      const video = await Video.findById(id);
-      if (!video) {
-        return res.status(404).json({ message: "Video not found" });
-      }
-  
-      if (video.uploader.toString() !== req.user.id) {
-        return res.status(403).json({ message: "Not authorized to update this video" });
-      }
-  
-      // Update fields if provided
-      if (title) video.title = title;
-      if (description) video.description = description;
-      if (category) video.category = category;
-  
-      // If thumbnail uploaded via multer + cloudinary
-      if (req.file && req.file.path) {
-        video.thumbnail = req.file.path; // Cloudinary URL
-      }
-  
-      await video.save();
-  
-      return res.status(200).json({
-        message: "Video updated successfully",
-        video,
-      });
-    } catch (error) {
-      console.error("Error updating video:", error);
-      return res.status(500).json({ message: "Internal server error", error: error.message });
+  try {
+    const { id } = req.params;
+    const { title, description, category } = req.body;
+    // Find a video
+    const video = await Video.findById(id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
     }
-  }
-  
+    // Ownership check
+    if (video.uploader.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized to update this video" });
+    }
 
-  
-  export async function deleteVideo(req, res) {
-    try {
-      const { id } = req.params;
-  
-      const video = await Video.findById(id);
-      if (!video) {
-        return res.status(404).json({ message: "Video not found" });
-      }
-  
-      if (video.uploader.toString() !== req.user.id) {
-        return res.status(403).json({ message: "Not authorized to delete this video" });
-      }
-  
-      await video.deleteOne();
-  
-      return res.status(200).json({ message: "Video deleted successfully" });
-    } catch (error) {
-      console.error("Error deleting video:", error);
-      return res.status(500).json({ message: "Internal server error", error: error.message });
+    // Update fields if provided
+    if (title) video.title = title;
+    if (description) video.description = description;
+    if (category) video.category = category;
+
+    // If thumbnail uploaded via multer + cloudinary
+    if (req.file && req.file.path) {
+      video.thumbnail = req.file.path; // Cloudinary URL
     }
+
+    await video.save();
+
+    return res.status(200).json({
+      message: "Video updated successfully",
+      video,
+    });
+  } catch (error) {
+    console.error("Error updating video:", error);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
-  
+}
+
+// Delete a video
+// DELETE /api/videos/:id
+export async function deleteVideo(req, res) {
+  try {
+    const { id } = req.params;
+    // Find a video based on id
+    const video = await Video.findById(id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+    // Ownership check
+    if (video.uploader.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized to delete this video" });
+    }
+    // Delete video
+    await video.deleteOne();
+    // Success response
+    return res.status(200).json({ message: "Video deleted successfully" });
+  } catch (error) {
+    // Handle errors
+    console.error("Error deleting video:", error);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+}

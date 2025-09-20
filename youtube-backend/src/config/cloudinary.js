@@ -1,8 +1,9 @@
 import dotenv from 'dotenv';
-dotenv.config(); // <-- ensures env vars exist here in ESM
+dotenv.config(); 
 
 import { v2 as cloudinary } from 'cloudinary';
 
+//Configuring the cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -10,4 +11,4 @@ cloudinary.config({
 });
 
 
-export default cloudinary;  // <-- Export the cloudinary instance itself
+export default cloudinary;  // Exporting the cloudinary itself

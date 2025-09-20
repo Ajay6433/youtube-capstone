@@ -4,10 +4,10 @@ import bcrypt from 'bcrypt';
 import { generateFromEmail } from 'unique-username-generator';
 import { OAuth2Client } from 'google-auth-library';
 
-
-
+// Accessing the Google Client ID stored into the env file
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+//Controller for the google login
 export const googleLogin = async (req, res) => {
   try {
     const { id_token } = req.body; // frontend will send this token
@@ -21,6 +21,7 @@ export const googleLogin = async (req, res) => {
       audience: process.env.GOOGLE_CLIENT_ID,
     });
 
+    //Getting the payload
     const payload = ticket.getPayload();
     const { email, name, picture } = payload;
 
@@ -28,9 +29,8 @@ export const googleLogin = async (req, res) => {
     let user = await User.findOne({ email });
 
     const username = generateFromEmail(email, 4); // create unique username from email
+    // Generating random password for the Google user
     const randomPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), 10);
-    console.log("randomPassword:", randomPassword)
-
 
     // If not, register new user automatically
     if (!user) {
@@ -39,6 +39,7 @@ export const googleLogin = async (req, res) => {
         name,
         email,
         password: randomPassword, 
+        // If profile picture is not available then using a default one
         avatar: picture || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
       });
     }
@@ -46,6 +47,7 @@ export const googleLogin = async (req, res) => {
     // Generate JWT
     const token = generateToken({id: user._id});
 
+    // Success reponse
     res.status(200).json({
       message: "Login successful",
       token,
@@ -62,8 +64,7 @@ export const googleLogin = async (req, res) => {
   }
 };
 
-
-
+// Controller to register a new user
 export async function register(req, res) {
   try {
     const { name, email, password } = req.body;
@@ -74,9 +75,6 @@ export async function register(req, res) {
     }
 
     const username = generateFromEmail(email, 4); // create unique username from email
-
-    console.log("req.body:", req.body);
-    console.log("req.file:", req.file);
 
     // Check if user already exists by email
     const existingUser = await User.findOne({ email });
@@ -112,10 +110,11 @@ export async function register(req, res) {
     return res.status(201).json({
       message: 'User registered successfully',
       user: userResponse,
-      token, // return token so user is immediately logged in
+      token, 
     });
 
   } catch (error) {
+    // Handle errors
     console.error("Error registering user:", error);
     return res.status(500).json({
       message: 'Internal server error',
@@ -124,20 +123,24 @@ export async function register(req, res) {
   }
 }
 
-  
-
+// Controller for login
 export async function login(req, res) {
     try {
+        // Getting details from the request body
         const { email, password } = req.body;
         const user = await User.findOne({ email });
+        // If email don't match
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
+        // If password don't match
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
+        // Generating JWT token
         const token = generateToken({ id: user._id });
+        // Success response
         return res.status(200).json({
             message: 'Sign in successful', token, user: {
                 id: user._id,
@@ -148,6 +151,7 @@ export async function login(req, res) {
             }
         });
     } catch (error) {
+      // Handle errors
         console.log("Error signing in", error);
         return res.status(500).json({ message: 'Internal server error', error: error.message });
     }

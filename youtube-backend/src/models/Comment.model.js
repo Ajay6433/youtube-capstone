@@ -8,11 +8,13 @@ const commentSchema = new mongoose.Schema(
       trim: true,
       maxlength: 500
     },
+    // Reference to the videoID
     video: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Video",
       required: true
     },
+    // Reference to the user Id
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
