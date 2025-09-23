@@ -14,6 +14,9 @@ export default function ChannelModal({ setShowChannelModal }) {
   const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
 
   // Error & Success states
   const handleClose = () => {
@@ -61,14 +64,17 @@ export default function ChannelModal({ setShowChannelModal }) {
       });
       // On success, store channel info in localStorage
       localStorage.setItem("channel", JSON.stringify(res.data));
+      console.log(res.data);
       toast.success(res.data.message || "Channel created successfully!");
       setSuccess("Channel created successfully!");
+      
       setForm({
         bannerPreview: null,
         channelBanner: null,
         channelName: "",
         description: "",
       });
+      window.location.reload();
 
       setTimeout(() => {
         handleClose();

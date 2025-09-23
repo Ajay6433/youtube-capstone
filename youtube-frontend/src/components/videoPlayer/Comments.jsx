@@ -84,7 +84,7 @@ const Comments = (videoId) => {
         try {
             const token = parsedUser?.token;
             const res = await api.put(
-                `/comments/${commentId}`,   // ✅ just use commentId
+                `/comments/${commentId}`,   //  just use commentId
                 { text: newText },
                 {
                     headers: {
@@ -99,6 +99,7 @@ const Comments = (videoId) => {
                 )
             );
             toast.success("Comment updated");
+            window.location.reload();
         } catch (err) {
             console.error("Failed to update comment");
             toast.error("Failed to update comment");

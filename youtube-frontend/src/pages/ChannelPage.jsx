@@ -1,34 +1,46 @@
-import { useMemo, useContext } from "react";
+import { useMemo, useContext, useEffect, useState } from "react";
 import { useVideos } from "../context/VideoContext";
 import ChannelVideoGrid from "../components/channelPage/ChannelVideoGrid";
+import UploadVideoModal from "../components/channelPage/UploadVideoModal";
 import { UserContext } from "../context/UserContext";
 
 export default function ChannelPage() {
-  // Get all videos from context
   const { videos } = useVideos();
-  // Get current user from context
   const { user } = useContext(UserContext);
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
-  // Get current channel being viewed from sessionStorage
-  let channel = sessionStorage.getItem("channel");
-  channel = channel ? JSON.parse(channel) : null;
+  const [channel, setChannel] = useState(null);
 
-  // Get owner's channel from localStorage (if needed for owner actions)
-  let ownerChannel = localStorage.getItem("ownerChannel");
-  ownerChannel = ownerChannel ? JSON.parse(ownerChannel) : null;
+  useEffect(() => {
+    // Read the flag to know where to get channel from
+    const source = sessionStorage.getItem("channelSource"); // "local" | "session"
 
-  // Redirect to home if no channel is found
-  if (!channel ) {
-    window.location.href = "/";
-  }
+    if (source === "local") {
+      // Get from localStorage if user came from My Channel button
+      const localChannel = localStorage.getItem("channel");
+      if (localChannel) setChannel(JSON.parse(localChannel));
+    } else {
+      // Default: get from sessionStorage (normal channel navigation)
+      const sessionChannel = sessionStorage.getItem("channel");
+      if (sessionChannel) setChannel(JSON.parse(sessionChannel));
+    }
+  }, []);
 
-  // Check if the logged-in user is the owner of the channel
+  // Redirect to home if no channel found
+  useEffect(() => {
+    if (!channel) {
+      const timer = setTimeout(() => {
+        window.location.href = "/";
+      }, 300); // small delay to allow channel to load
+      return () => clearTimeout(timer);
+    }
+  }, [channel]);
+
   const isOwner =
     user?.user?.id && channel?.owner?._id
       ? String(user.user.id) === String(channel.owner?._id)
       : false;
 
-  // Filter videos to only those uploaded by this channel
   const channelVideos = useMemo(() => {
     if (!videos || !channel) return [];
     return videos.filter(
@@ -36,7 +48,8 @@ export default function ChannelPage() {
     );
   }, [videos, channel?.owner?._id]);
 
-  // Render channel page UI
+  if (!channel) return null; // prevent rendering until channel is set
+
   return (
     <div className="w-full">
       {/* Banner section */}
@@ -60,30 +73,26 @@ export default function ChannelPage() {
           className="w-28 h-28 sm:w-48 sm:h-48 rounded-full mx-auto sm:mx-0"
         />
         <div className="flex flex-col items-center sm:items-start w-full">
-          {/* Channel name */}
           <h1 className="text-2xl sm:text-3xl font-bold break-words">
             {channel?.channelName || "Unnamed Channel"}
           </h1>
-          {/* Owner and subscriber info */}
-          <span className="text-sm text-gray-500 flex flex-col sm:flex-row items-center sm:items-center my-2 gap-1 sm:gap-2">
-            <p className="text-gray-600">
-              @{channel?.owner.name || "Unknown Owner"}
-            </p>
+          <span className="text-sm text-gray-500 flex flex-col sm:flex-row items-center my-2 gap-1 sm:gap-2">
+            <p className="text-gray-600">@{channel?.owner.name || "Unknown Owner"}</p>
             <p className="hidden sm:block text-gray-600 mx-1">•</p>
             <p className="text-gray-600">
               Subscribers: {channel?.subscribers?.length || 0}
             </p>
           </span>
-          {/* Channel description */}
           <p className="text-gray-600 max-w-xs sm:max-w-full">
             {channel?.description || "No description available."}
           </p>
 
-          {/* Conditional Buttons: owner or visitor */}
           {isOwner ? (
             <div className="flex flex-col sm:flex-row gap-2 mt-4">
-              {/* Owner actions */}
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                onClick={() => setShowUploadModal(true)}
+              >
                 Upload Video
               </button>
               <button className="px-4 py-2 bg-gray-800 text-white rounded-full hover:bg-gray-900 transition">
@@ -92,7 +101,6 @@ export default function ChannelPage() {
             </div>
           ) : (
             <div className="flex flex-col sm:flex-row gap-2 mt-4">
-              {/* Visitor actions */}
               <button className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition">
                 Subscribe
               </button>
@@ -100,6 +108,14 @@ export default function ChannelPage() {
                 Join
               </button>
             </div>
+          )}
+
+          {/* Upload Video Modal */}
+          {showUploadModal && (
+            <UploadVideoModal
+              setShowUploadModal={setShowUploadModal}
+              channelId={channel?._id}
+            />
           )}
         </div>
       </div>
@@ -109,13 +125,10 @@ export default function ChannelPage() {
         <h2 className="text-xl sm:text-2xl font-bold px-2 sm:px-4 mb-4">
           Videos
         </h2>
-        {/* Show channel videos or empty message */}
         {channelVideos.length > 0 ? (
           <ChannelVideoGrid videos={channelVideos} singleColumn={false} />
         ) : (
-          <p className="text-center text-gray-600">
-            No videos uploaded yet.
-          </p>
+          <p className="text-center text-gray-600">No videos uploaded yet.</p>
         )}
       </div>
     </div>

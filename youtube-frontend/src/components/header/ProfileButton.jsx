@@ -1,16 +1,20 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 
 const ProfileButton = ({ onClick }) => {
   const { user } = useContext(UserContext);
+  const [imgError, setImgError] = useState(false);
 
-  // Normalize user fields (handles both normal login and Google login)
+  // Normalize avatar (handles both normal login and Google login)
   const avatar =
-    user?.user?.avatar || user?.avatar ||
-    "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
+    !imgError
+      ? user?.user?.avatar || user?.avatar
+      : "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
 
-  // Get user's name (handles both normal login and Google login)
+  // Normalize name
   const name = user?.user?.name || user?.name || null;
+
+  if (!user) return null; // Don't render if no user context yet
 
   return (
     <button
@@ -21,6 +25,7 @@ const ProfileButton = ({ onClick }) => {
         src={avatar}
         alt="Profile"
         className="h-8 w-8 rounded-full object-cover"
+        onError={() => setImgError(true)} // fallback if broken image
       />
       <p className="hidden sm:block">{name ? `Hi ${name}` : "Welcome"}</p>
     </button>

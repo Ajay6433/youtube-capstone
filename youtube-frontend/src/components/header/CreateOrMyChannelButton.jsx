@@ -14,14 +14,16 @@ export default function CreateOrMyChannelButton({ user, setShowChannelModal }) {
   }, []);
 
   const handleButtonClick = () => {
-    if (channel) {
-      // Navigate to channel page
-      navigate(`/channel/${channel._id}`);
-    } else {
-      // Open modal to create channel
-      setShowChannelModal(true);
-    }
-  };
+  if (channel) {
+    // Tell ChannelPage to load from localStorage
+    sessionStorage.setItem("channelSource", "local");
+
+    navigate(`/channel/${channel._id}`);
+  } else {
+    setShowChannelModal(true);
+  }
+};
+
 
   return (
     // Show button only if user is logged in

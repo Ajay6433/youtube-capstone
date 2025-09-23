@@ -14,6 +14,8 @@ export default function ChannelVideoCard({ video, onDelete }) {
   async function channelPageDetails() {
     let channel = await api.get(`/channel/${video.channelId._id}`);
     channel = channel.data.channel;
+    sessionStorage.setItem("channelSource", "session");
+
     sessionStorage.setItem("channel", JSON.stringify(channel));
     window.location.href = `/channel/${video.channelId._id}`;
   }
